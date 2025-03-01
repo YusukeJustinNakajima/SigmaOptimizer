@@ -1,3 +1,4 @@
+<img src="https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7" alt="SigmaOptimizer Logo" width="200">
 ![image](https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7)
 # 🚀 SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
 
