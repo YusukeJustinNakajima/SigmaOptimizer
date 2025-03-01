@@ -14,6 +14,7 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ## 📜 Background  
 🔹 **LLM-based rule generation often relies solely on user prompts**, leading to **hallucinations** because the model lacks access to real event logs. This results in **shallow and easily bypassed** detection rules.  
 🔹 **Rule creation and validation are often separate processes**, meaning even improved rules need to be re-validated manually, which is inefficient.  
+🔹 **Creating effective Sigma rules requires a deep understanding of threats.** While it's possible to create rules with limited knowledge, such rules are **easily bypassed by attackers** due to their simplicity.  
 
 ---
 
