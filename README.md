@@ -1,5 +1,4 @@
-# 📌 SigmaOptimizer 
-- Automated Sigma Rule Optimization 🚀  
+# 📌 SigmaOptimizer - Automated Sigma Rule Optimization 🚀  
 
 ## 🎯 Overview  
 **SigmaOptimizer** is a **Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs.  
@@ -67,7 +66,18 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
     - The final detection report is saved in `detection_result.txt`.  
 
 ---
+## 🤝 Contributing  
+We would love to hear your feedback and contributions! 🚀  
+If you try **SigmaOptimizer** and have suggestions for improvements, **please submit a pull request or create an issue** on GitHub. Your contributions will help make this tool even better!  
 
+💡 **Ways to contribute:**  
+- Report **bugs** or **feature requests** via GitHub Issues 🐛  
+- Submit **pull requests** to enhance the rule generation logic 🔧  
+- Improve **documentation** or add **new functionalities** 📝  
+
+Your input is greatly appreciated! 🙌
+
+---
 ## 🔮 Future Work  
 🛠 **Further optimization of Sigma rule generation**  
 📊 **Development of a GUI interface**  
