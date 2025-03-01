@@ -81,6 +81,7 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
     ```
 
 7. Generate new Sigma Rule based on previous rules
+   - Enter y to generate new rules.
     ```
     Generate new Sigma Rule based on previous rules? (y/n):
     ```
