@@ -26,11 +26,18 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ---
 
 ## 🚀 Usage  
-### 🔧 Prerequisites  
-- Windows environment  
-- PowerShell 5.1 or later  
-- Required modules: `OpenAI_SigmaModule.psm1`, `SigmaRuleTests.psm1`, `Invoke-ArgFuscator`  
-
+### 🔧 Prerequisites   
+- **Windows environment**  
+- **PowerShell 5.1 or later**  
+- **Required modules:**  
+  - `OpenAI_SigmaModule.psm1`  
+  - `SigmaRuleTests.psm1`  
+  - `Invoke-ArgFuscator`  
+- **OpenAI API Key (Currently, only OpenAI is supported)**  
+  - You need to set up an **environment variable** for the API key:  
+    ```powershell
+    $env:OPENAI_APIKEY = "your_api_key_here"
+    ```
 ### 🏁 Execution Steps  
 1. **Import required modules**  
     ```powershell
