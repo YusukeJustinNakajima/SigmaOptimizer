@@ -2,7 +2,7 @@
 # <img src="https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7" alt="SigmaOptimizer Logo" width="3.5%"> SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
 
 ## 🎯 Overview  
-**SigmaOptimizer** is a **Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs.  
+**SigmaOptimizer** is a **Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs using **LLM**.  
 It is implemented as a PowerShell script and **integrates log analysis, rule evaluation, and iterative refinement** to enhance detection capabilities.  
 
 ✅ **Automated Sigma rule generation**  
