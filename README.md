@@ -1,4 +1,4 @@
-# 🚀 SigmaOptimizer  <br> - Automated Sigma Rule Generation and Optimization -  
+# 🚀 SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
 
 ## 🎯 Overview  
 **SigmaOptimizer** is a **Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs.  
