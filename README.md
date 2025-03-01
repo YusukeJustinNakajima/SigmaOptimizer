@@ -29,10 +29,6 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ### 🔧 Prerequisites   
 - **Windows environment**  
 - **PowerShell 5.1 or later**  
-- **Required modules:**  
-  - `OpenAI_SigmaModule.psm1`  
-  - `SigmaRuleTests.psm1`  
-  - `Invoke-ArgFuscator`  
 - **OpenAI API Key (Currently, only OpenAI is supported)**  
   - You need to set up an **environment variable** for the API key:  
     ```powershell
