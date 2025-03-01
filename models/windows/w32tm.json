@@ -1,0 +1,1 @@
+{"command":[{"command":"w32tm"},{"argument":"/ntpte"},{"value":"1234567890"}],"modifiers":{"RandomCase":{"AppliesTo":["argument"],"Probability":"0.5"},"OptionCharSubstitution":{"AppliesTo":["argument"],"Probability":"0.5","OutputOptionChars":["-","/"]},"QuoteInsertion":{"AppliesTo":["argument","path","url","value"],"Probability":"0.5"}}}

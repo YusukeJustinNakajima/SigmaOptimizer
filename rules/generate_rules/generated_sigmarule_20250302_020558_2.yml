@@ -1,0 +1,22 @@
+﻿title: Obfuscated Command-Line Execution of whoami.exe
+id: f1e2d3c4-b5a6-7890-cdef-1234567890ab
+description: |
+    Detects the execution of whoami.exe with obfuscated command-line arguments, potentially indicating user enumeration attempts by attackers.
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.discovery
+  - attack.execution
+  - attack.t1087.002
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    EventID: 1
+    Image|endswith: '\\whoami.exe'
+    CommandLine|re: '(?i)\bwhoami\b.*[/-][''"]?u[^a-zA-Z0-9]*s[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[''"]?'
+  condition: selection
+falsepositives:
+  - Legitimate use of whoami.exe with user-related flags for administrative purposes.
+level: medium

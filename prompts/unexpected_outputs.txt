@@ -1,0 +1,134 @@
+### Unexpected Output 1 (YAML Parsing Errors for Regular Expressions) ###
+detection:
+  selection_security:
+    EventID: 4688
+    CommandLine|re:
+      - '(?i)\bwhoami\b.*[/-][\'"]?u[^a-zA-Z0-9]*s[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[\'"]?'
+  condition: selection_security
+
+### Correct Output 1 (Fixed) ###
+detection:
+  selection_security:
+    EventID: 4688
+    CommandLine|re:
+      - '(?i)\bwhoami\b.*[/-][''"]?u[^a-zA-Z0-9]*s[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[''"]?'
+  condition: selection_security
+
+### Unexpected Output 2 (YAML Parsing Errors for Regular Expressions) ###
+detection:
+  selection:
+    Image|endswith:
+      - '\\whoami.exe'
+    CommandLine|re:
+      - '(?i)\\bwhoami\\b.*[/-][\'"]?u[\'"]?s[\'"]?e[\'"]?r[\'"]?'
+      - '(?i)\\bwhoami\\b.*[/-]\\s*u\\s*s\\s*e\\s*r'
+      - '(?i)\\bwhoami\\b.*[/-][\'"]?u[^a-zA-Z0-9]*s[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[\'"]?'
+
+### Correct Output 2 (Fixed) ###
+detection:
+  selection:
+    Image|endswith:
+      - '\\whoami.exe'
+    CommandLine|re:
+      - '(?i)\\bwhoami\\b.*[/-][\"\\'']?u[\"\\'']?[sS][\"\\'']?[eE][\"\\'']?[rR][\"\\'']?'
+      - '(?i)\\bwhoami\\b.*[/-][\'"]?u[\'"]?s[\'"]?e[\'"]?r[\'"]?'
+      - '(?i)\\bwhoami\\b.*[/-][''"]?u[^a-zA-Z0-9]*s[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[''"]?'
+
+### Unexpected Output 3 (YAML Parsing Errors for Regular Expressions) ###
+detection:
+  selection_security:
+    EventID: 4688
+    CommandLine|re:
+      - '(?i)\\bwhoami\\b.*[/-][\"\\\']?u[\"\\\']?[sS][\"\\\']?[eE][\"\\\']?[rR][\"\\\']?'
+
+### Correct Output 3 (Fixed) ###
+detection:
+  selection_security:
+    EventID: 4688
+    CommandLine|re:
+      '(?i)\\bwhoami\\b.*[/-]["'']?u["'']?[sS]["'']?[eE]["'']?[rR]["'']?'
+
+### Unexpected Output 4 (Too Spectific Rule) ###
+detection:
+  selection_certutil:
+    Image|endswith:
+      - '\\certutil.exe'
+    CommandLine|re:
+      - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
+    ParentImage|endswith:
+      - '\\cmd.exe'
+  condition: selection_certutil
+
+### Unexpected Output 5 (Too Spectific Rule) ###
+detection:
+  selection_certutil:
+    Image|endswith:
+      - '\\certutil.exe'
+    CommandLine|contains:
+      - '/urlcache'
+    CommandLine|re:
+      - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
+      - '(?i)h["'']?t["'']?t["'']?p["'']?s["'']?:["'']?//["'']?w["'']?w["'']?w["'']?\.["'']?e["'']?x["'']?a["'']?m["'']?p["'']?l["'']?e["'']?\.org'
+      - '(?i)h[\W_]*t[\W_]*t[\W_]*p[\W_]*s?:[\W_]*//[\W_]*w[\W_]*w[\W_]*w[\W_]*\.[\W_]*e[\W_]*x[\W_]*a[\W_]*m[\W_]*p[\W_]*l[\W_]*e[\W_]*\.org'
+    ParentImage|endswith:
+      - '\\cmd.exe'
+  condition: selection_certutil
+
+### Unexpected Output 6 (Easy to bypass because Image field is bypassed by renaming the file) ###
+detection:
+  selection_image:
+    Image|endswith:
+      - '\certutil.exe'
+
+### Better Output 6 (Fixed) ###
+detection:
+  selection_image:
+    OriginalFileName|endswith:
+      - '\certutil.exe'
+
+### Unexpected Output 7 (Easy to bypass because Image field is bypassed by renaming the file) ###
+detection:
+  selection_image:
+    Image|re:
+      - '(?i)\\certutil\.exe$'
+
+### Better Output 7 (Fixed) ###
+detection:
+  selection_image:
+    OriginalFileName|contains:
+      - '\certutil.exe'
+
+### Unexpected Output 8 (Too Spectific Rule because attacker may use https://evil.com to bypass this rule) ###
+detection:
+  selection_certutil:
+    CommandLine|re: '(?i)c[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[^a-zA-Z0-9]*t[^a-zA-Z0-9]*u[^a-zA-Z0-9]*t[^a-zA-Z0-9]*i[^a-zA-Z0-9]*l'
+  selection_exampleorg:
+    CommandLine|re: '(?i)w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.example\.org'
+  condition: selection_certutil and selection_exampleorg
+
+### Better Output 8 (Fixed) ###
+detection:
+  selection_certutil:
+    CommandLine|re: '(?i)c[^a-zA-Z0-9]*e[^a-zA-Z0-9]*r[^a-zA-Z0-9]*t[^a-zA-Z0-9]*u[^a-zA-Z0-9]*t[^a-zA-Z0-9]*i[^a-zA-Z0-9]*l'
+
+### Unexpected Output 9 (Too Spectific Rule because attacker may use https://evil.jp to bypass this rule) ###
+detection:
+    selection_certutil:
+        Image|endswith:
+            - '\\certutil.exe'
+        OriginalFileName:
+            - 'certutil.exe'
+    selection_cmd:
+        CommandLine|re:
+            - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
+
+### Better Output 9 (Fixed) ###
+detection:
+    selection_certutil:
+        Image|endswith:
+            - '\\certutil.exe'
+        OriginalFileName:
+            - 'certutil.exe'
+    selection_cmd:
+        CommandLine|re:
+            - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//'

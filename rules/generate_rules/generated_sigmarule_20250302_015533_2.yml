@@ -1,0 +1,24 @@
+﻿title: Detection of 'conhost.exe' Execution with '-ForceV1'
+id: f1e2d3c4-b5a6-7890-cdef-1234567890ab
+description: Detects the execution of 'conhost.exe' with the '-ForceV1' flag, which can indicate PowerShell execution or security evasion techniques.
+references:
+  - https://example.com/reference-to-conhost-execution
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.execution
+  - attack.privilege-escalation
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    EventID: 4688
+    Image|endswith:
+      - '\\conhost.exe'
+    CommandLine|contains:
+      - '-ForceV1'
+  condition: selection
+falsepositives:
+  - Legitimate administrative scripts or tools using 'conhost.exe' with the '-ForceV1' flag.
+level: high

@@ -1,0 +1,25 @@
+﻿title: Suspicious Execution of whoami.exe via Sysmon
+id: 9303a09f-3241-43c5-9bad-eeb8d3436c7a
+description: Detects the execution of whoami.exe process initiated by cmd.exe, which can be used for user enumeration by attackers.
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.execution
+  - attack.discovery
+  - attack.t1087.002
+logsource:
+  product: windows
+  service: sysmon
+  category: process_creation
+detection:
+  selection_image:
+    Image|endswith:
+      - '\whoami.exe'
+  selection_parent:
+    ParentImage|endswith:
+      - '\cmd.exe'
+  condition: selection_image and selection_parent
+falsepositives:
+  - Legitimate administrative scripts or processes invoking whoami.exe via cmd.exe
+id: 6a57fcf2-4cdb-4a99-a9ec-4f3a1ccb6821
+level: medium

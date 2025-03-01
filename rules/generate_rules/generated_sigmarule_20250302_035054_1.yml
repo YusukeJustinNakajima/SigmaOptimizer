@@ -1,0 +1,20 @@
+﻿title: Suspicious whoami.exe Execution via cmd.exe
+id: 8d536bb4-993b-44e9-a247-f7cc601b4054
+description: Detects execution of whoami.exe via cmd.exe, which may indicate user enumeration by an attacker.
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.discovery
+  - attack.t1087.002
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    EventID: 4688
+    Image|endswith: '\\whoami.exe'
+    ParentImage|endswith: '\\cmd.exe'
+  condition: selection
+falsepositives:
+  - Legitimate use of cmd.exe to execute whoami.exe for administrative purposes.
+level: medium

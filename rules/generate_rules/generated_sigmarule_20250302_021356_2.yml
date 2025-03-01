@@ -1,0 +1,25 @@
+﻿title: Service Creation with Alternate Data Streams via sc.exe
+id: f1e2d3c4-b5a6-7890-cdef-1234567890ab
+description: Detects sc.exe executions that create services with binPath utilizing alternate data streams to execute cmd.exe, indicating potential persistence or command injection.
+references:
+  - https://attack.mitre.org/techniques/T1543/002/
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.persistence
+  - attack.defense-evasion
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith:
+      - '\sc.exe'
+    CommandLine|contains:
+      - 'create'
+    CommandLine|re:
+      - 'binPath=".*?:cmd\.exe"'
+  condition: selection
+falsepositives:
+  - Uncommon but legitimate use of sc.exe with alternate data streams
+level: high

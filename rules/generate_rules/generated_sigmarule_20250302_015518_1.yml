@@ -1,0 +1,22 @@
+﻿title: Detection of 'whoami' Command Execution with Obfuscation
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+description: Detects execution of the 'whoami' command, including common obfuscation techniques, which can be used for user enumeration by attackers.
+references:
+  - https://example.com/reference-to-whoami-detection
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+  - attack.discovery
+  - attack.execution
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    EventID: 4688
+    CommandLine|re:
+      - '(?i)w[^a-zA-Z0-9]*h[^a-zA-Z0-9]*o[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*i'
+  condition: selection
+falsepositives:
+  - Legitimate use of the 'whoami' command for administrative or troubleshooting purposes.
+level: medium
