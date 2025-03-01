@@ -6,8 +6,8 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 
 ✅ **Automated Sigma rule generation**  
 ✅ **Rule validation with syntax checks (Invoke-SigmaRuleTests)**  
-✅ **Detection rate measurement using Hayabusa**  
-✅ **Command obfuscation support (Invoke-ArgFuscator) for robust detection**  
+✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
+✅ **Command obfuscation support ([Invoke-ArgFuscator](https://github.com/wietze/Invoke-ArgFuscator)) for robust detection**  
 
 ---
 
