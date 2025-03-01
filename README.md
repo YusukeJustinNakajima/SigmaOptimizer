@@ -27,7 +27,6 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 🔹 **Reducing hallucinations through multiple validation mechanisms**  
 
 ---
-
 ## 🚀 Usage  
 ### 🔧 Prerequisites   
 - **Windows environment**  
@@ -87,6 +86,10 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
     ```
     Generate new Sigma Rule based on previous rules? (y/n):
     ```
+
+---
+## ✨ Tool Execution Flow 
+![diagram (5)](https://github.com/user-attachments/assets/8578d5a5-0276-4fdf-ba8d-0bf571020fa8)
 
 ---
 ## 🤝 Contributing  
