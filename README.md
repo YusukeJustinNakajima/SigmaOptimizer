@@ -24,7 +24,9 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 🔹 **End-to-end rule creation, syntax validation, detection testing, and improvement** in a single workflow.  
 🔹 **Log-based rule generation**, rather than relying on user prompts, ensuring rules align with actual system events.  
 🔹 **Automated command obfuscation support**, allowing rules to be more resilient against evasion techniques.  
-
+🔹 **Reducing hallucinations through multiple validation mechanisms**  
+   - **Sigma rule consistency checks**: The tool ensures that generated rules adhere to Sigma's best practices.  
+   - **Automatic correction of errors**: If inconsistencies are found, the tool modifies the rule (e.g., extracting only valid sections from `title` to `level`).  
 ---
 
 ## 🚀 Usage  
