@@ -35,6 +35,15 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
     ```powershell
     $env:OPENAI_APIKEY = "your_api_key_here"
     ```
+- **Required PowerShell Modules**  
+  The script depends on the following PowerShell modules:  
+  - `Pester` (for running tests)  
+  - `powershell-yaml` (for parsing YAML files)  
+
+  Install them using:  
+  ```powershell
+  Install-Module Pester -Force
+  Install-Module powershell-yaml -Force
 ### 🏁 Execution Steps  
 1. **Import required modules**  
     ```powershell
