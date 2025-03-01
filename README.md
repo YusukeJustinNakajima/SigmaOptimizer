@@ -18,9 +18,9 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ---
 
 ## ✨ Features  
-💡 **End-to-end rule creation, syntax validation, detection testing, and improvement** in a single workflow.  
-📂 **Log-based rule generation**, rather than relying on user prompts, ensuring rules align with actual system events.  
-🔄 **Automated command obfuscation support**, allowing rules to be more resilient against evasion techniques.  
+🔹 **End-to-end rule creation, syntax validation, detection testing, and improvement** in a single workflow.  
+🔹 **Log-based rule generation**, rather than relying on user prompts, ensuring rules align with actual system events.  
+🔹 **Automated command obfuscation support**, allowing rules to be more resilient against evasion techniques.  
 
 ---
 
@@ -79,10 +79,10 @@ Your input is greatly appreciated! 🙌
 
 ---
 ## 🔮 Future Work  
-🛠 **Further optimization of Sigma rule generation**  
-📊 **Development of a GUI interface**  
-⚡ **Cloud integration (AWS Lambda / Azure Functions)**  
-🛡 **Integration with EDR solutions**  
+🔹 **Further optimization of Sigma rule generation**  
+🔹 **Development of a GUI interface**  
+🔹 **Cloud integration (AWS Lambda / Azure Functions)**  
+🔹**Integration with EDR solutions**  
 
 ---
 
