@@ -109,6 +109,7 @@ Your input is greatly appreciated! 🙌
 🔹 **Testing generalization performance (e.g., ensuring that rules created based on two obfuscation patterns also work against other obfuscation patterns).**  
 🔹 **False positive testing on regular EVTX files to verify that rules do not generate false alerts under normal system operations.**  
 🔹 **Additional syntax checks (e.g., preventing minor mistakes such as using contain instead of contains and automatically correcting small errors in the detection field).**  
+🔹 **A machine learning-powered feature that filters distinctive logs to optimize LLM input and avoid rate limits.**
 
 ---
 
