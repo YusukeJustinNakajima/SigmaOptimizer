@@ -46,22 +46,24 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
   Install-Module Pester -Force
   Install-Module powershell-yaml -Force
 ### 🏁 Execution Steps  
-1. **Run the script**  
+1. **Launch Powershell with administrative privileges**
+
+2. **Run the script**  
     ```powershell
     .\SigmaOptimizer.ps1
     ```
 
-2. **Select execution environment**  
+3. **Select execution environment**  
     ```
     Choose execution environment (ps for PowerShell, cmd for CMD)
     ```
 
-3. **Enter the command to execute**  
+4. **Enter the command to execute**  
     ```
     Enter the command to execute
     ```
 
-4. **Select Log Source**
+5. **Select Log Source**
     ```
     Select the log sources to use:
     1. Application
@@ -72,16 +74,16 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
     Enter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all)::
     ```
     
-5. **Review generated Sigma rules**  
+6. **Review generated Sigma rules**  
     - Rules are saved in `.yml` format under `rules/generate_rules/`.  
 
-6. **Run detection test with Hayabusa**  
+7. **Run detection test with Hayabusa**  
     - Enter `y` to execute Hayabusa and validate the rule.  
     ```
     Execute Hayabusa with this Sigma rule? (y/n)
     ```
 
-7. **Generate new Sigma Rule based on previous rules**
+8. **Generate new Sigma Rule based on previous rules**
    - Enter y to generate new rules.
     ```
     Generate new Sigma Rule based on previous rules? (y/n):
