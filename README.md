@@ -8,6 +8,7 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ✅ **Automated Sigma rule generation**  
 ✅ **Rule validation with syntax checks (Invoke-SigmaRuleTests)**  
 ✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
+✅ **FP check of created rules using [evtx-baseline](https://github.com/NextronSystems/evtx-baseline)**  
 ✅ **Command obfuscation support ([Invoke-ArgFuscator](https://github.com/wietze/Invoke-ArgFuscator)) for robust detection**  
 
 https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
@@ -50,6 +51,9 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
   Install-Module powershell-yaml -Force
   Install-Module Invoke-ArgFuscator -Force
   ```
+- **Extract the Archive**
+  Ensure the benign_evtx_logs/win10-client.tgz file is fully extracted before running the script.
+  The default is only to check FP using the normal logs obtained in the **win10 client environment**, so please add your logs according to your environment!
   
 ### 🏁 Execution Steps  
 1. **Launch Powershell with administrative privileges**
@@ -115,7 +119,6 @@ Your input is greatly appreciated! 🙌
 ## 🔮 Future Work  
 🔹 **Further optimization of Sigma rule generation**  
 🔹 **Testing generalization performance (e.g., ensuring that rules created based on two obfuscation patterns also work against other obfuscation patterns).**  
-🔹 **False positive testing on regular EVTX files to verify that rules do not generate false alerts under normal system operations.**  
 🔹 **Additional syntax checks (e.g., preventing minor mistakes such as using contain instead of contains and automatically correcting small errors in the detection field).**  
 🔹 **A machine learning-powered feature that filters distinctive logs to optimize LLM input and avoid rate limits.**
 
