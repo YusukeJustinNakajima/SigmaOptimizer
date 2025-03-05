@@ -10,7 +10,7 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
 ✅ **Command obfuscation support ([Invoke-ArgFuscator](https://github.com/wietze/Invoke-ArgFuscator)) for robust detection**  
 
-https://github.com/user-attachments/assets/3ef47dcd-7b01-40f1-a9c2-af27b77f58b2
+https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 
 ---
 
