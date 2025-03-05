@@ -215,7 +215,10 @@ function Print-IterationSummary {
     }
 }
 
-# Read detection_fields.txt (list of field names)
+# Block network traffic
+Write-Host "Block all external traffic to safely execute files and acquire logs`n" -ForegroundColor Green
+New-NetFirewallRule -DisplayName "Block Internet" -Direction Outbound -Action Block -Enabled True -Profile Any | Out-Null
+
 $detectionFieldsFile = ".\config\detection_fields.txt"
 if (Test-Path $detectionFieldsFile) {
     $detectionFields = Get-Content -Path $detectionFieldsFile
@@ -240,7 +243,7 @@ $command = Read-Host "Enter the command to execute"
 $commandCount = 1
 
 try {
-    $ObfuscateCommand = Invoke-ArgFuscator -Command $command -n 3
+    $ObfuscateCommand = Invoke-ArgFuscator -Command $command -n 0
     $IsObfuscation = $true
 } catch {
     # Write-Error "Error in Invoke-ArgFuscator: $_"
@@ -346,6 +349,7 @@ foreach ($logName in $logSources) {
 
             foreach ($event in $events) {
                 $xml = $event.ToXml()
+                # Write-Host "$xml"
                 
                 # Exclude logs containing "powershell" in cmd environment
                 if ($envChoice -eq "cmd" -and $xml.ToLower() -match "powershell") {
@@ -455,6 +459,10 @@ $allIterationResults = @()
 $currentIteration = 1
 $maxIterations = 3
 $coverage = 0
+
+Write-Host "Turn on Internet access to use LLM`n" -ForegroundColor Green
+Remove-NetFirewallRule -DisplayName "Block Internet" | Out-Null
+Start-Sleep -Seconds 3
 
 while (($currentIteration -le $maxIterations) -and ($coverage -le 100)) {
     if ($currentIteration -eq 1) {

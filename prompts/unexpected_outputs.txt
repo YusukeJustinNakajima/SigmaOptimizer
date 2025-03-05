@@ -74,7 +74,7 @@ detection:
       - '\\cmd.exe'
   condition: selection_certutil
 
-### Unexpected Output 6 (Easy to bypass because Image field is bypassed by renaming the file) ###
+### Unexpected Output 6 (Easy to bypass because Image field is bypassed by renaming the file name) ###
 detection:
   selection_image:
     Image|endswith:
