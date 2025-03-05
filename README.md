@@ -45,7 +45,7 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 
   Install them using:  
   ```powershell
-  Install-Module Pester -Force
+  Install-Module Pester -Force -SkipPublisherCheck
   Install-Module powershell-yaml -Force
 ### 🏁 Execution Steps  
 1. **Launch Powershell with administrative privileges**
