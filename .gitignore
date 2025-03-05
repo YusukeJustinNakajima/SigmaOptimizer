@@ -1,0 +1,5 @@
+benign_evtx_logs/*.evtx
+logs/*.evtx
+final_log.txt
+detection_result.txt
+fp_check_result.txt
