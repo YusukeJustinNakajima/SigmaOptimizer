@@ -4,3 +4,4 @@ logs/*.evtx
 final_log.txt
 detection_result.txt
 fp_check_result.txt
+hayabusa.exe
