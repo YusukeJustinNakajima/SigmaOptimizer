@@ -86,7 +86,7 @@ function New-SigmaRule {
         $roleContentToUse = $script:llmRole_iteration_first
     }
 
-    $sigmaRule = Invoke-OpenAIRequest -model "o1-mini" -roleContent $roleContentToUse -userContent $evtxLog
+    $sigmaRule = Invoke-OpenAIRequest -model "o3-mini" -roleContent $roleContentToUse -userContent $evtxLog
 
     if ($sigmaRule) { 
         return $sigmaRule 
