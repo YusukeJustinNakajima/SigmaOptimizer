@@ -51,8 +51,6 @@ detection:
 ### Unexpected Output 4 (Too Spectific Rule) ###
 detection:
   selection_certutil:
-    Image|endswith:
-      - '\\certutil.exe'
     CommandLine|re:
       - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
     ParentImage|endswith:
@@ -62,10 +60,6 @@ detection:
 ### Unexpected Output 5 (Too Spectific Rule) ###
 detection:
   selection_certutil:
-    Image|endswith:
-      - '\\certutil.exe'
-    CommandLine|contains:
-      - '/urlcache'
     CommandLine|re:
       - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
       - '(?i)h["'']?t["'']?t["'']?p["'']?s["'']?:["'']?//["'']?w["'']?w["'']?w["'']?\.["'']?e["'']?x["'']?a["'']?m["'']?p["'']?l["'']?e["'']?\.org'
@@ -146,3 +140,17 @@ detection:
     OriginalFileName|contains:
       - '\certutil.exe'
     Image|contains: 'test'
+
+### Unexpected Output 11 (Specifications for words that do not conform to the rules)###
+detection:
+  selection:
+    OriginalFileName|iequals: "whoami.exe"
+    CommandLine|icontains: "/user"
+  condition: selection
+
+### Correct Output 11 (Fixed) ###
+detection:
+  selection:
+    OriginalFileName: "whoami.exe"
+    CommandLine|contains: "/user"
+  condition: selection
