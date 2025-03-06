@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7" alt="SigmaOptimizer Logo" width="3.5%"> SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
+# <img src="https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7" alt="SigmaOptimizer Logo" width="3.8%"> SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
 
 ## 🎯 Overview  
 **SigmaOptimizer** is a **Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs using **LLM**.  
@@ -34,30 +34,21 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 ### 🔧 Prerequisites   
 - **Windows environment**  
 - **PowerShell 5.1 or later**  
-- **OpenAI API Key (Currently, only OpenAI is supported)**  
-  - You need to set up an **environment variable** for the API key:  
-    ```powershell
-    $env:OPENAI_APIKEY = "your_api_key_here"
-    ```
-- **Required PowerShell Modules**  
-  The script depends on the following PowerShell modules:  
-  - `Pester` (for running tests)  
-  - `powershell-yaml` (for parsing YAML files)  
-  - `Invoke-ArgFuscator` (for command obfuscation) 
+- **Run `AutoSetup.ps1` to automate the entire setup process. This script handles all the necessary preparations seamlessly. Before executing the script, update the `OPENAI_APIKEY` section in `AutoSetup.ps1` with your own API key.**
+    - Installing Required PowerShell Modules
+        - `Pester` (for running tests)  
+        - `powershell-yaml` (for parsing YAML files)  
+        - `Invoke-ArgFuscator` (for command obfuscation) 
+    - Downloading and Setting Up Hayabusa
+        - The script automatically downloads the latest Hayabusa release from GitHub.
+    - Extracting the Archive
+        - The script ensures the benign_evtx_logs/win10-client.tgz file is extracted
+        - The default setting only checks false positives (FP) using the normal logs obtained in a Windows 10 client environment.
+        - If needed, add your own logs according to your environment(or use [evtx-baseline](https://github.com/NextronSystems/evtx-baseline))
+- **Recommended to configure the following two log sources to create better sigma rules:**
+    - Microsoft-Windows-Sysmon/Operational -> Sysmon installation
+    - Security EventID:4688 -> https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/manage/component-updates/command-line-process-auditing
 
-  Install them using:  
-  ```powershell
-  Install-Module Pester -Force -SkipPublisherCheck
-  Install-Module powershell-yaml -Force
-  Install-Module Invoke-ArgFuscator -Force
-  ```
-- **Extract the Archive**
-  - Ensure the benign_evtx_logs/win10-client.tgz file is fully extracted before running the script.
-  - The default is only to check FP using the normal logs obtained in the **win10 client environment**, so please add your logs according to your environment!(or use [evtx-baseline](https://github.com/NextronSystems/evtx-baseline))
-  ```powershell
-  tar -xvzf benign_evtx_logs/win10-client.tgz -C benign_evtx_logs/
-  ```
-  
 ### 🏁 Execution Steps  
 1. **Launch Powershell with administrative privileges**
 
