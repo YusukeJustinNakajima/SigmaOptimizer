@@ -209,7 +209,7 @@ function Print-IterationSummary {
 
     foreach ($group in $groupedResults) {
         Write-Host "===== Iteration $($group.Name) Summary =====" -ForegroundColor Cyan
-        $candidates = $group.Group | Select-Object CandidateIndex, DetectionResult, Coverage, FpCount
+        $candidates = $group.Group | Select-Object CandidateIndex, DetectionResult, FpCount
         Print-FormattedTable -Data $candidates
         Write-Host ""
     }
@@ -541,7 +541,7 @@ while (($currentIteration -le $maxIterations) -and ($coverage -le 100)) {
                             Write-Host "Events with hits: $hits" -ForegroundColor Green
                         }
                         $coverage = [math]::Floor($hits / ($commandCount * 2.5) * 100)
-                        Write-Host "Coverage is $coverage%`n" -ForegroundColor Green
+                        # Write-Host "Coverage is $coverage%`n" -ForegroundColor Green
                         $candidateDetectionResult = "Hits: $hits"
                     }
                     else {
@@ -630,7 +630,7 @@ while (($currentIteration -le $maxIterations) -and ($coverage -le 100)) {
         $candidateIndex++
     }
 
-    Print-IterationSummary -Data ($aggregatedCandidateResults | Select-Object Iteration, CandidateIndex, DetectionResult, Coverage, FpCount)
+    Print-IterationSummary -Data ($aggregatedCandidateResults | Select-Object Iteration, CandidateIndex, DetectionResult, FpCount)
     Write-Host "`n"
 
     $currentIteration++
