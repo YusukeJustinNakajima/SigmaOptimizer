@@ -293,7 +293,7 @@ Write-Host "Start time: $startTime, End time: $endTime`n" -ForegroundColor Green
 if ($envChoice -eq "cmd") {
     $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational')
 } else {
-    $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational', 'Windows Powershell')
+    $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational', 'Windows Powershell', 'Microsoft-Windows-PowerShell/Operational')
 }
 
 Write-Host "Select the log sources to use:" -ForegroundColor Cyan
