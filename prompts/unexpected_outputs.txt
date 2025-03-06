@@ -132,3 +132,17 @@ detection:
     selection_cmd:
         CommandLine|re:
             - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//'
+
+### Unexpected Output 10 (Specifications for words that do not conform to the rules)###
+detection:
+  selection_image:
+    OriginalFileName|icontains:
+      - '\certutil.exe'
+    Image|contains|any: 'test'
+
+### Correct Output 10 (Fixed) ###
+detection:
+  selection_image:
+    OriginalFileName|contains:
+      - '\certutil.exe'
+    Image|contains: 'test'
