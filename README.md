@@ -43,7 +43,7 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
         - The script automatically downloads the latest Hayabusa release from GitHub.
     - Extracting the Archive
         - The script ensures the benign_evtx_logs/win10-client.tgz file is extracted
-        - The default setting only checks false positives (FP) using the normal logs obtained in a Windows 10 client environment.
+        - The default setting only checks false positives (FP) using the normal logs obtained in a **Windows 10 client environment.**
         - If needed, add your own logs according to your environment(or use [evtx-baseline](https://github.com/NextronSystems/evtx-baseline))
 - **Recommended to configure the following two log sources to create better sigma rules:**
     - Microsoft-Windows-Sysmon/Operational -> Sysmon installation
