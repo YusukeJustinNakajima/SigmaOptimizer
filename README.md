@@ -54,6 +54,9 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 - **Extract the Archive**
   - Ensure the benign_evtx_logs/win10-client.tgz file is fully extracted before running the script.
   - The default is only to check FP using the normal logs obtained in the **win10 client environment**, so please add your logs according to your environment!(or use [evtx-baseline](https://github.com/NextronSystems/evtx-baseline))
+  ```powershell
+  tar -xvzf benign_evtx_logs/win10-client.tgz -C benign_evtx_logs/
+  ```
   
 ### 🏁 Execution Steps  
 1. **Launch Powershell with administrative privileges**
