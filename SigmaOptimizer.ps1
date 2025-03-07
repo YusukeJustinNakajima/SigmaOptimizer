@@ -84,7 +84,7 @@ function Extract-SigmaRules {
     foreach ($line in $SigmaOutput -split "`n") {
         
         if ($line -match "^\s*author:") {
-            $line = "author: Yusuke Nakajima"
+            $line = "author: [your_name_here]"
             $hasAuthor = $true
         }
         
