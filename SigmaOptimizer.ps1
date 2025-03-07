@@ -368,7 +368,7 @@ foreach ($logName in $logSources) {
             }
         }
     } catch {
-        Write-Output "Error retrieving logs from '$logName': $_"
+        # Write-Output "Error retrieving logs from '$logName'"
     }
 }
 
