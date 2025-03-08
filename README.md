@@ -30,6 +30,19 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 🔹 **Reducing hallucinations through multiple validation mechanisms**  
 
 ---
+
+## 🚀 Use Cases - Powerful Detection with SigmaOptimizer
+### 🔍 Analyze Executable Files & Generate Sigma Rules
+- You have obtained a **new malware sample** or a **Red Team tool** (e.g., `mimikatz.exe`)
+- Execute the file in a controlled environment, Capture all relevant event logs, Analyze the logs and generate a **custom Sigma rule**
+
+### 🔍 Detect Malicious Commands (with Obfuscation) & Build Detection Rules
+- Input the suspicious command you want to detect(e.g., `certutil /f /urlcache https://www.example.org/ homepage.txt`)
+- (Option) Automatically obfuscates the entered command and generates logs.(Note: Only commands included in the repository's model that support obfuscation are applicable.)
+- Capture system logs to understand its behavior, Automatically generate a Sigma rule.
+
+---
+
 ## 🚀 Usage  
 ### 🔧 Prerequisites   
 - **Windows environment**  
@@ -114,13 +127,12 @@ If you try **SigmaOptimizer** and have suggestions for improvements, **please su
 Your input is greatly appreciated! 🙌
 
 ---
-## 🔮 Future Work  
-🔹 **Further optimization of Sigma rule generation**  
+## 🔮 Future Work 
+🔹 **A machine learning-powered feature that filters distinctive logs to optimize LLM input and avoid rate limits.**   
 🔹 **Testing generalization performance (e.g., ensuring that rules created based on two obfuscation patterns also work against other obfuscation patterns).**  
-🔹 **Additional syntax checks (e.g., preventing minor mistakes such as using contain instead of contains and automatically correcting small errors in the detection field).**  
-🔹 **A machine learning-powered feature that filters distinctive logs to optimize LLM input and avoid rate limits.**
+🔹 **Additional syntax checks (e.g., preventing minor mistakes such as using contains instead of contain and automatically correcting small errors in the detection field).**  
 
 ---
 
-SigmaOptimizer **simplifies and automates threat hunting** by enabling efficient rule generation and validation. Try it out to enhance your **Sigma-based detection strategy!** 🚀
+SigmaOptimizer **simplifies and automates threat hunting, SOC, and forensic** by enabling efficient rule generation and validation. Try it out to enhance your **Sigma-based detection strategy!** 🚀
 
