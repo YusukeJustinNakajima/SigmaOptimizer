@@ -38,7 +38,7 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 
 ### 🔍 Detect Malicious Commands (with Obfuscation) & Build Detection Rules
 - Input the suspicious command you want to detect(e.g., `certutil /f /urlcache https://www.example.org/ homepage.txt`)
-- (Option) Automatically obfuscates the entered command and generates logs.(Note: Only commands included in the repository's model that support obfuscation are applicable.)
+- **Automatically obfuscates the entered command and generates logs.** (Note: Only commands included in the repository's model that support obfuscation are applicable.)
 - Capture system logs to understand its behavior, Automatically generate a Sigma rule.
 
 ---
