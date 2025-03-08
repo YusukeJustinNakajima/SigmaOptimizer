@@ -1,0 +1,19 @@
+﻿title: Mimikatz Execution Detected via Process Creation
+id: dfe2ecfa-7201-46ab-bd2c-1b587e94690d
+status: test
+description: >
+  Detects execution of a process whose original filename is "mimikatz.exe". The use
+  of mimikatz is a known indicator of credential dumping activities. This rule leverages
+  fields available from Sysmon process creation events.
+author: [your_name_here]
+date: 2025-03-08
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_mimikatz:
+    OriginalFileName: "mimikatz.exe"
+  condition: selection_mimikatz
+falsepositives:
+  - Legitimate testing of mimikatz in controlled lab environments
+level: high

@@ -1,0 +1,25 @@
+﻿title: Suspicious LSASS Access by Non-System Process
+id: 3241c91b-8448-41d0-ad73-c9f1d9c62561
+status: test
+description: >
+  Detects suspicious process access events where a non-system process attempts
+  to access the LSASS executable. In these events the TargetImage ends with "lsass.exe",
+  and a granted access value of "0x1010" is observed. Legitimate system processes are expected
+  to reside under Windows directories, so processes originating outside of "C:\Windows" are flagged.
+author: [your_name_here]
+date: 2025-03-08
+logsource:
+  product: windows
+  category: process_access
+detection:
+  selection_injection:
+    TargetImage|endswith:
+      - "\\lsass.exe"
+    GrantedAccess: "0x1010"
+  filter_system:
+    SourceImage|startswith:
+      - "C:\\Windows"
+  condition: selection_injection and not filter_system
+falsepositives:
+  - Rare legitimate administrative tools running from non-standard locations accessing LSASS for valid purposes
+level: high

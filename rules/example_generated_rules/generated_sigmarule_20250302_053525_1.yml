@@ -1,0 +1,33 @@
+﻿title: Malicious Usage of Certutil.exe with Suspicious Parameters
+id: 0103581c-8341-4327-9cb2-17ba3aefbcfc
+description: |
+    Detects the execution of certutil.exe with command line arguments indicative of downloading, encoding, or decoding files, which may be used for malicious purposes such as data exfiltration or persistence.
+references:
+    - https://attack.mitre.org/software/SUE445/
+author: Yusuke Nakajima
+date: 2025-03-02
+tags:
+    - attack.execution
+    - attack.defense_evasion
+    - attack.t1202
+logsource:
+    product: windows
+    category: process_creation
+detection:
+    selection_suspicious_cmd:
+        OriginalFileName|contains: 'certutil.exe'
+        CommandLine|contains:
+            - 'certutil'
+            - '/urlcache'
+            - '/split'
+            - '/f'
+            - 'http'
+    selection_encoding_cmd:
+        OriginalFileName|contains: 'certutil.exe'
+        CommandLine|contains:
+            - '/encode'
+            - '/decode'
+    condition: selection_suspicious_cmd or selection_encoding_cmd
+falsepositives:
+    - Legitimate administrative tasks involving certificate management, file decoding, or encoding using certutil.exe.
+level: high
