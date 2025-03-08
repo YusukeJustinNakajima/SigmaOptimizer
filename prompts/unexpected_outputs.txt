@@ -51,8 +51,8 @@ detection:
 ### Unexpected Output 4 (Too Spectific Rule) ###
 detection:
   selection_certutil:
-    CommandLine|re:
-      - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
+    CommandLine|contains:
+      - 'https://test.org/web/test.txt'
     ParentImage|endswith:
       - '\\cmd.exe'
   condition: selection_certutil
@@ -60,10 +60,8 @@ detection:
 ### Unexpected Output 5 (Too Spectific Rule) ###
 detection:
   selection_certutil:
-    CommandLine|re:
-      - '(?i)h[^a-zA-Z0-9]*t[^a-zA-Z0-9]*t[^a-zA-Z0-9]*p[^a-zA-Z0-9]*s?:[^a-zA-Z0-9]*//[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*w[^a-zA-Z0-9]*\.[^a-zA-Z0-9]*e[^a-zA-Z0-9]*x[^a-zA-Z0-9]*a[^a-zA-Z0-9]*m[^a-zA-Z0-9]*p[^a-zA-Z0-9]*l[^a-zA-Z0-9]*e[^a-zA-Z0-9]*\.org'
-      - '(?i)h["'']?t["'']?t["'']?p["'']?s["'']?:["'']?//["'']?w["'']?w["'']?w["'']?\.["'']?e["'']?x["'']?a["'']?m["'']?p["'']?l["'']?e["'']?\.org'
-      - '(?i)h[\W_]*t[\W_]*t[\W_]*p[\W_]*s?:[\W_]*//[\W_]*w[\W_]*w[\W_]*w[\W_]*\.[\W_]*e[\W_]*x[\W_]*a[\W_]*m[\W_]*p[\W_]*l[\W_]*e[\W_]*\.org'
+    CommandLine|contains:
+      - 'https://example.com/test.txt'
     ParentImage|endswith:
       - '\\cmd.exe'
   condition: selection_certutil
