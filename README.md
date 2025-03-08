@@ -45,8 +45,7 @@ https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
 
 ## 🚀 Usage  
 ### 🔧 Prerequisites   
-- **Windows environment**  
-- **PowerShell 5.1 or later**  
+- **Windows environment** 
 - **Run `AutoSetup.ps1` to automate the entire setup process. This script handles all the necessary preparations seamlessly. Before executing the script, update the `OPENAI_APIKEY` section in `AutoSetup.ps1` with your own API key.**
     - Installing Required PowerShell Modules
         - `Pester` (for running tests)  
