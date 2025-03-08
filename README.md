@@ -11,7 +11,7 @@ It is implemented as a PowerShell script and **integrates log analysis, rule eva
 ✅ **FP check of created rules using [evtx-baseline](https://github.com/NextronSystems/evtx-baseline)**  
 ✅ **Command obfuscation support ([Invoke-ArgFuscator](https://github.com/wietze/Invoke-ArgFuscator)) for robust detection**  
 
-https://github.com/user-attachments/assets/4747e9e3-3805-47fa-b0ad-f5cde5d06161
+https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 
 ---
 
