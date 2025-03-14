@@ -79,14 +79,14 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
     Choose execution environment (ps for PowerShell, cmd for CMD, cal for MITRE Caldera):
     ```
 
-- If you choose ps or cmd
+4. If you choose ps or cmd
 
-    4. **Enter the command to execute**
+    1. **Enter the command to execute**
         ```
         Enter the command to execute
         ```
 
-    5. **Select Log Source**
+    2. **Select Log Source**
         ```
         Select the log sources to use:
         1. Application
@@ -97,14 +97,14 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
         Enter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all)::
         ```
 
-- If you choose cal (MITRE Caldera Integration)
+5. If you choose cal (MITRE Caldera Integration)
 
-    4. **Execute MITRE Caldera Operation**
+    1. **Execute MITRE Caldera Operation**
         - Run the agent in the environment where SigmaOptimizer is running.
         - Execute an operation that includes the behavior you want to detect.
         - Note: the implant name should be **splunkd (default name).** Otherwise it will not work.
     
-    5. **Confirm MITRE Caldera Operation Completion**
+    2. **Confirm MITRE Caldera Operation Completion**
         ```
         Is the MITRE Caldera Operation complete? (y/n):
         ```
