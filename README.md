@@ -6,7 +6,7 @@
 It is implemented as a PowerShell script and **integrates log analysis, rule evaluation, and iterative refinement** to enhance detection capabilities.  
 
 ✅ **Automated Sigma rule generation based on real-world logs**  
-✅ **Log Generation through Integration with [MITRE Caldera](https://github.com/mitre/caldera)**  
+✅ **Integration with [MITRE Caldera](https://github.com/mitre/caldera)**  
 ✅ **Rule validation with syntax checks (Invoke-SigmaRuleTests)**  
 ✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
 ✅ **FP check of created rules using [evtx-baseline](https://github.com/NextronSystems/evtx-baseline)**  
