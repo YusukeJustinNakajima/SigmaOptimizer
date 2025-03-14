@@ -79,7 +79,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
     Choose execution environment (ps for PowerShell, cmd for CMD, cal for MITRE Caldera):
     ```
 
-4. If you choose ps or cmd
+4. **If you choose ps or cmd**
 
     1. **Enter the command to execute**
         ```
@@ -97,7 +97,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
         Enter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all)::
         ```
 
-5. If you choose cal (MITRE Caldera Integration)
+5. **If you choose cal (When using MITRE Caldera to perform various techniques)**
 
     1. **Execute MITRE Caldera Operation**
         - Run the agent in the environment where SigmaOptimizer is running.
