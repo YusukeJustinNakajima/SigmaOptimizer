@@ -152,3 +152,43 @@ detection:
     OriginalFileName: "whoami.exe"
     CommandLine|contains: "/user"
   condition: selection
+
+### Unexpected Output 12 (Specifications for words that do not conform to the rules("i"contains is wrong and there is no "equals" field) ###
+detection:
+  selection_original:
+    OriginalFileName|iequals: "a.exe"
+  selection_company:
+    Company|icontains: "example"
+
+### Correct Output 12 (Fixed) ###
+detection:
+  selection_original:
+    OriginalFileName: "a.exe"
+  selection_company:
+    Company|contains: "example"
+
+### Unexpected Output 13 (there is no "not" field, so use filter) ###
+detection:
+  selection:
+    OriginalFileName: "Cmd.Exe"
+    CommandLine|contains:
+      - "net user"
+      - "/domain"
+  anomalous_directory:
+    CurrentDirectory|not|startswith:
+      - "C:\\Windows"
+      - "C:\\Program Files"
+  condition: selection and anomalous_directory
+
+### Unexpected Output 13 (Fixed) ###
+detection:
+  selection:
+    OriginalFileName: "Cmd.Exe"
+    CommandLine|contains:
+      - "net user"
+      - "/domain"
+  filter:
+    CurrentDirectory|startswith:
+      - "C:\\Windows"
+      - "C:\\Program Files"
+  condition: selection and not filter
