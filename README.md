@@ -6,7 +6,7 @@
 It is implemented as a PowerShell script and **integrates log analysis, rule evaluation, and iterative refinement** to enhance detection capabilities.  
 
 ✅ **Automated Sigma rule generation based on real-world logs**  
-✅ **Integration with [MITRE Caldera](https://github.com/mitre/caldera)**  
+✅ **Integration with [MITRE Caldera](https://github.com/mitre/caldera) (β version)**  
 ✅ **Rule validation with syntax checks (Invoke-SigmaRuleTests)**  
 ✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
 ✅ **FP check of created rules using [evtx-baseline](https://github.com/NextronSystems/evtx-baseline)**  
@@ -38,7 +38,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 - You have obtained a **new malware sample** or a **Red Team tool** (e.g., `mimikatz.exe`)
 - Execute the file in a controlled environment, Capture all relevant event logs, Analyze the logs and generate a **custom Sigma rule**
 
-### 🔍 Integration with MITRE Caldera
+### 🔍 Integration with MITRE Caldera (β version)
 - Using **MITRE Caldera**, various attack techniques can be selected, and detection rules can be easily created for them.
 
 ### 🔍 Detect Malicious Commands (with Obfuscation) & Build Detection Rules
