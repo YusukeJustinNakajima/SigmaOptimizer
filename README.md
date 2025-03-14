@@ -5,7 +5,8 @@
 **SigmaOptimizer** is a **End-to-End Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs using **LLM**.  
 It is implemented as a PowerShell script and **integrates log analysis, rule evaluation, and iterative refinement** to enhance detection capabilities.  
 
-✅ **Automated Sigma rule generation**  
+✅ **Automated Sigma rule generation based on real-world logs**  
+✅ **Log Generation through Integration with [MITRE Caldera](https://github.com/mitre/caldera)**  
 ✅ **Rule validation with syntax checks (Invoke-SigmaRuleTests)**  
 ✅ **Detection rate measurement using [Hayabusa](https://github.com/Yamato-Security/hayabusa)**  
 ✅ **FP check of created rules using [evtx-baseline](https://github.com/NextronSystems/evtx-baseline)**  
@@ -26,6 +27,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 ## ✨ Features  
 🔹 **End-to-end rule creation, syntax validation, detection testing, and improvement** in a single workflow.  
 🔹 **Log-based rule generation**, rather than relying on user prompts, ensuring rules align with actual system events.  
+🔹 Detection rule creation for **various attack techniques** enabled through integration with **MITRE Caldera.**  
 🔹 **Automated command obfuscation support**, allowing rules to be more resilient against evasion techniques.  
 🔹 **Reducing hallucinations through multiple validation mechanisms**  
 
@@ -35,6 +37,9 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 ### 🔍 Analyze Executable Files & Generate Sigma Rules
 - You have obtained a **new malware sample** or a **Red Team tool** (e.g., `mimikatz.exe`)
 - Execute the file in a controlled environment, Capture all relevant event logs, Analyze the logs and generate a **custom Sigma rule**
+
+### 🔍 Integration with MITRE Caldera
+- Using **MITRE Caldera**, various attack techniques can be selected, and detection rules can be easily created for them.
 
 ### 🔍 Detect Malicious Commands (with Obfuscation) & Build Detection Rules
 - Input the suspicious command you want to detect(e.g., `certutil /f /urlcache https://www.example.org/ homepage.txt`)
@@ -61,7 +66,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
     - Microsoft-Windows-Sysmon/Operational -> Sysmon installation
     - Security EventID:4688 -> https://learn.microsoft.com/ja-jp/windows-server/identity/ad-ds/manage/component-updates/command-line-process-auditing
 
-### 🏁 Execution Steps  
+### 🏁 Execution Steps
 1. **Launch Powershell with administrative privileges**
 
 2. **Run the script**  
@@ -71,24 +76,38 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 
 3. **Select execution environment**  
     ```
-    Choose execution environment (ps for PowerShell, cmd for CMD)
+    Choose execution environment (ps for PowerShell, cmd for CMD, cal for MITRE Caldera):
     ```
 
-4. **Enter the command to execute**  
-    ```
-    Enter the command to execute
-    ```
+- If you choose ps or cmd
 
-5. **Select Log Source**
-    ```
-    Select the log sources to use:
-    1. Application
-    2. Security
-    3. System
-    4. Microsoft-Windows-Sysmon/Operational
+    4. **Enter the command to execute**
+        ```
+        Enter the command to execute
+        ```
+
+    5. **Select Log Source**
+        ```
+        Select the log sources to use:
+        1. Application
+        2. Security
+        3. System
+        4. Microsoft-Windows-Sysmon/Operational
+        
+        Enter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all)::
+        ```
+
+- If you choose cal (MITRE Caldera Integration)
+
+    4. **Execute MITRE Caldera Operation**
+        - Run the agent in the environment where SigmaOptimizer is running.
+        - Execute an operation that includes the behavior you want to detect.
+        - Note: the implant name should be **splunkd (default name).** Otherwise it will not work.
     
-    Enter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all)::
-    ```
+    5. **Confirm MITRE Caldera Operation Completion**
+        ```
+        Is the MITRE Caldera Operation complete? (y/n):
+        ```
     
 6. **Review generated Sigma rules**  
     - Rules are saved in `.yml` format under `rules/generate_rules/`.  
