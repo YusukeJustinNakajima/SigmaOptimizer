@@ -215,10 +215,6 @@ function Print-IterationSummary {
     }
 }
 
-# Block network traffic
-Write-Host "Block all external traffic to safely execute files and acquire logs`n" -ForegroundColor Green
-New-NetFirewallRule -DisplayName "Block Internet" -Direction Outbound -Action Block -Enabled True -Profile Any | Out-Null
-
 $detectionFieldsFile = ".\config\detection_fields.txt"
 if (Test-Path $detectionFieldsFile) {
     $detectionFields = Get-Content -Path $detectionFieldsFile
@@ -237,10 +233,14 @@ if (Test-Path $logDir) {
     Write-Output "Directory '$logDir' created."
 }
 
-# Prompt the user for execution environment (ps for PowerShell, cmd for CMD) and the command to execute
-$envChoice = Read-Host "Choose execution environment (ps for PowerShell, cmd for CMD)"
-$command = Read-Host "Enter the command to execute"
+# Prompt the user for execution environment
+$envChoice = Read-Host "`nChoose execution environment (ps for PowerShell, cmd for CMD, cal for MITRE Caldera)"
 $commandCount = 1
+if ($envChoice -ne "cal") {
+    Write-Host "Block all external traffic to safely execute files and acquire logs`n" -ForegroundColor Green
+    New-NetFirewallRule -DisplayName "Block Internet" -Direction Outbound -Action Block -Enabled True -Profile Any | Out-Null
+    $command = Read-Host "Enter the command to execute"
+}
 
 if ($envChoice -eq "ps") {
     $startTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
@@ -272,6 +272,17 @@ if ($envChoice -eq "ps") {
             $commandCount++
         }
     }
+} elseif ($envChoice -eq "cal") {
+    Write-Host "Selected MITRE Caldera environment." -ForegroundColor Green
+    Write-Host "Waiting for 'splunkd' process to start..."
+    # Wait for splunkd to start (check every 1 seconds)
+    while (-not (Get-Process -Name "splunkd" -ErrorAction SilentlyContinue)) {
+        Start-Sleep -Seconds 1
+    }
+    Write-Host "'splunkd' process detected."
+    $startTimeObj = Get-Date
+    $startTime = $startTimeObj.ToString("yyyy-MM-dd HH:mm:ss")
+    $commandCount = 1
 } else {
     $startTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile", "-Command", "`"$command`"" -Wait
@@ -287,80 +298,38 @@ if ($envChoice -eq "ps") {
 
 Start-Sleep -Seconds 2
 
-$endTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-Write-Host "Start time: $startTime, End time: $endTime`n" -ForegroundColor Green
-
-if ($envChoice -eq "cmd") {
-    $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational')
-} else {
-    $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational', 'Windows Powershell', 'Microsoft-Windows-PowerShell/Operational')
-}
-
-Write-Host "Select the log sources to use:" -ForegroundColor Cyan
-for ($i = 0; $i -lt $defaultLogSources.Count; $i++) {
-    Write-Host "$($i+1). $($defaultLogSources[$i])"
-}
-
-$logSourcePrompt = "`nEnter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all):"
-$inputNumbers = Read-Host $logSourcePrompt
-
-if ($inputNumbers -and $inputNumbers.Trim() -ne "") {
-    $numbers = $inputNumbers -split "\s*,\s*" | ForEach-Object { [int]$_ }
-    $logSources = @()
-    foreach ($num in $numbers) {
-        if ($num -ge 1 -and $num -le $defaultLogSources.Count) {
-            $logSources += $defaultLogSources[$num - 1]
-        }
-    }
-    if ($logSources.Count -eq 0) {
-        $logSources = $defaultLogSources
-    }
-} else {
-    $logSources = $defaultLogSources
-}
-
-Write-Host "Using log sources: $($logSources -join ', ')`n" -ForegroundColor Yellow
-
-
-if (!(Test-Path $logDir)) {
-    New-Item -ItemType Directory -Path $logDir | Out-Null
-}
-
-$combinedXml = @{}  # Hashtable to store logs (XML strings) for each log source
-
-foreach ($logName in $logSources) {
+if ($envChoice -eq "cal") {
+    $combinedXml = @{}
+    $logName = "Microsoft-Windows-Sysmon/Operational"
+    # Get process ID of splunkd
+    $parentPid = (Get-Process -Name "splunkd").Id
+    Write-Host "Using ParentProcessId: $parentPid for log filtering." -ForegroundColor Cyan
+    $filterXPath = "*[EventData[Data[@Name='ParentProcessId']='$parentPid']]"
+    
     try {
+        
+        # Prompt the user to confirm that the MITRE Caldera Operation is complete
+        $operationComplete = Read-Host "Is the MITRE Caldera Operation complete? (y/n)"
+        while ($operationComplete -ne "y" -and $operationComplete -ne "yes") {
+            Write-Host "Operation not complete. Waiting..." -ForegroundColor Yellow
+            Start-Sleep -Seconds 3
+            $operationComplete = Read-Host "`nIs the MITRE Caldera Operation complete? (y/n)"
+        }
 
+        $endTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+        
+        # Output EVTX files using wevtutil
         $sanitizedLogName = $logName -replace '[\\/]', '_'
         $evtxPath = "$logDir\$sanitizedLogName.evtx"
-        # Export EVTX using wevtutil
         wevtutil epl $logName $evtxPath 2> $null
-        
-        $events = Get-WinEvent -FilterHashtable @{
-            LogName   = $logName;
-            StartTime = $startTime;
-            EndTime   = $endTime
-        } -ErrorAction Stop
 
+        # Retrieve logs from the EVTX file since the specified start time
+        $events = Get-WinEvent -Path $evtxPath -FilterXPath $filterXPath | Where-Object { $_.TimeCreated -ge $startTimeObj }
         if ($events) {
-            $logEntries = @()  # Store logs for each log source
-            $powershellCount = 0
-
+            $logEntries = @()
             foreach ($event in $events) {
                 $xml = $event.ToXml()
                 # Write-Host "$xml"
-                
-                # Exclude logs containing "powershell" in cmd environment
-                if ($envChoice -eq "cmd" -and $xml.ToLower() -match "powershell") {
-                    continue
-                }
-
-                # Limit PowerShell logs to a maximum of 5
-                if ($logName -match "powershell") {
-                    if ($powershellCount -ge 5) { continue }
-                    $powershellCount++
-                }
-
                 $logEntries += $xml
             }
             if ($logEntries.Count -gt 0) {
@@ -368,10 +337,95 @@ foreach ($logName in $logSources) {
             }
         }
     } catch {
-        # Write-Output "Error retrieving logs from '$logName'"
+        # Error handling (e.g., output if necessary)
+    }
+}
+else {
+    $endTime = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+    if ($envChoice -eq "cmd") {
+        $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational')
+    }
+    else {
+        $defaultLogSources = @('Application', 'Security', 'System', 'Microsoft-Windows-Sysmon/Operational', 'Windows Powershell', 'Microsoft-Windows-PowerShell/Operational')
+    }
+
+    Write-Host "Select the log sources to use:" -ForegroundColor Cyan
+    for ($i = 0; $i -lt $defaultLogSources.Count; $i++) {
+        Write-Host "$($i+1). $($defaultLogSources[$i])"
+    }
+
+    $logSourcePrompt = "`nEnter the numbers corresponding to the log sources you want to use, separated by commas (Press Enter for all):"
+    $inputNumbers = Read-Host $logSourcePrompt
+
+    if ($inputNumbers -and $inputNumbers.Trim() -ne "") {
+        $numbers = $inputNumbers -split "\s*,\s*" | ForEach-Object { [int]$_ }
+        $logSources = @()
+        foreach ($num in $numbers) {
+            if ($num -ge 1 -and $num -le $defaultLogSources.Count) {
+                $logSources += $defaultLogSources[$num - 1]
+            }
+        }
+        if ($logSources.Count -eq 0) {
+            $logSources = $defaultLogSources
+        }
+    } else {
+        $logSources = $defaultLogSources
+    }
+
+    Write-Host "Using log sources: $($logSources -join ', ')`n" -ForegroundColor Yellow
+
+    if (!(Test-Path $logDir)) {
+        New-Item -ItemType Directory -Path $logDir | Out-Null
+    }
+
+    $combinedXml = @{}  # Hashtable to store logs (XML strings) for each log source
+
+    foreach ($logName in $logSources) {
+        try {
+            $sanitizedLogName = $logName -replace '[\\/]', '_'
+            $evtxPath = "$logDir\$sanitizedLogName.evtx"
+            # Export EVTX using wevtutil
+            wevtutil epl $logName $evtxPath 2> $null
+            
+            $events = Get-WinEvent -FilterHashtable @{
+                LogName   = $logName;
+                StartTime = $startTime;
+                EndTime   = $endTime
+            } -ErrorAction Stop
+
+            if ($events) {
+                $logEntries = @()  # Store logs for each log source
+                $powershellCount = 0
+
+                foreach ($event in $events) {
+                    $xml = $event.ToXml()
+                    # Exclude logs containing "powershell" in cmd environment
+                    if ($envChoice -eq "cmd" -and $xml.ToLower() -match "powershell") {
+                        continue
+                    }
+
+                    # Limit PowerShell logs to a maximum of 5
+                    if ($logName -match "powershell") {
+                        if ($powershellCount -ge 5) { continue }
+                        $powershellCount++
+                    }
+
+                    $logEntries += $xml
+                }
+                if ($logEntries.Count -gt 0) {
+                    $combinedXml[$logName] = $logEntries
+                }
+            }
+        } catch {
+            # Write-Output "Error retrieving logs from '$logName'"
+        }
     }
 }
 
+Write-Host "Start time: $startTime, End time: $endTime`n" -ForegroundColor Green
+
+$finalLog = ""
 foreach ($logName in $combinedXml.Keys) {
     $finalLog += "### $logName Log ###`n"
     # Index variable to count log entries
@@ -431,6 +485,10 @@ foreach ($logName in $combinedXml.Keys) {
         if ($xmlDoc.Event.EventData) {
             foreach ($dataNode in $xmlDoc.Event.EventData.Data) {
                 $key = $dataNode.Name
+                # If environment is cal, skip ParentImage and ParentCommandLine
+                if ($envChoice -eq "cal" -and ($key -eq "ParentImage" -or $key -eq "ParentCommandLine")) {
+                    continue
+                }
                 if ($detectionFields -contains $key) {
                     $value = $dataNode.'#text'
                     $finalLog += "${key}: $value`n"
@@ -459,9 +517,11 @@ $currentIteration = 1
 $maxIterations = 3
 $coverage = 0
 
-Write-Host "Turn on Internet access to use LLM`n" -ForegroundColor Green
-Remove-NetFirewallRule -DisplayName "Block Internet" | Out-Null
-Start-Sleep -Seconds 3
+if ($envChoice -ne "cal") {
+    Write-Host "Turn on Internet access to use LLM`n" -ForegroundColor Green
+    Remove-NetFirewallRule -DisplayName "Block Internet" | Out-Null
+    Start-Sleep -Seconds 3
+}
 
 while (($currentIteration -le $maxIterations) -and ($coverage -le 100)) {
     if ($currentIteration -eq 1) {

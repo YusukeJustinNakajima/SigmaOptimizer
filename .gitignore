@@ -1,6 +1,7 @@
 benign_evtx_logs/Logs_Client/*.evtx
 benign_evtx_logs/win10-client.tgz
 logs/*.evtx
+rules/generate_rules/*.yml
 final_log.txt
 detection_result.txt
 fp_check_result.txt
