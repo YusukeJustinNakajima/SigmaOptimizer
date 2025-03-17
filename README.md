@@ -41,9 +41,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 ### 🔍 Integration with MITRE Caldera (β version)
 - Using **MITRE Caldera**, various attack techniques can be selected, and detection rules can be easily created for them.
 
-
-https://github.com/user-attachments/assets/fdafcd9b-8abf-4821-acca-4a31a85f626e
-
+https://github.com/user-attachments/assets/c888ce79-58f0-4219-be1e-6e2364c4409a
 
 ### 🔍 Detect Malicious Commands (with Obfuscation) & Build Detection Rules
 - Input the suspicious command you want to detect(e.g., `certutil /f /urlcache https://www.example.org/ homepage.txt`)
