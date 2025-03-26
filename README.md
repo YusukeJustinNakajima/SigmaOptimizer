@@ -1,5 +1,5 @@
 
-# <img src="https://github.com/user-attachments/assets/882178cc-6873-49dd-a725-2c201753b0f7" alt="SigmaOptimizer Logo" width="3.8%"> SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
+# <img src="https://github.com/user-attachments/assets/67b71885-8c31-46e0-a4ae-5ac0ec7f5f5e" alt="SigmaOptimizer Logo" width="3.8%"> SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
 
 ## 🎯 Overview  
 **SigmaOptimizer** is a **End-to-End Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs using **LLM**.  
