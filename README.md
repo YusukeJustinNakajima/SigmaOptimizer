@@ -35,7 +35,7 @@ https://github.com/user-attachments/assets/4a637447-1a29-4874-be4e-ee2cc3486310
 
 ---
 
-## 🚀 Use Cases - Powerful Detection with SigmaOptimizer
+## 📌  Use Cases - Powerful Detection with SigmaOptimizer
 ### 🔍 Analyze Executable Files & Generate Sigma Rules
 - You have obtained a **new malware sample** or a **Red Team tool** (e.g., `mimikatz.exe`)
 - Execute the file in a controlled environment, Capture all relevant event logs, Analyze the logs and generate a **custom Sigma rule**
