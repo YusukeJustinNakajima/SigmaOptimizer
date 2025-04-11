@@ -131,7 +131,6 @@ https://github.com/user-attachments/assets/c888ce79-58f0-4219-be1e-6e2364c4409a
    - Enter y to generate new rules.
     ```
     Generate new Sigma Rule based on previous rules? (y/n):
-
 ---
 ## 🤝 Contributing  
 We would love to hear your feedback and contributions! 🚀  
