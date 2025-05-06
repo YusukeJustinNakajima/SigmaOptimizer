@@ -36,7 +36,7 @@ function Invoke-OpenAIRequest {
                 @{ role = "user"; content = $userContent }
             )
         } | ConvertTo-Json -Depth 10
-    } elseif ($model -eq "o1-mini") {
+    } elseif ($model -eq "o4-mini") {
         $combinedContent = "$roleContent`n`n"
         $combinedContent += "$userContent`n`n"
         $body = @{
