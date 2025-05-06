@@ -42,6 +42,5 @@ Define the Rule Structure:
 - Failure to adhere to this requirement will result in an invalid rule.
 
 6. Provide Sigma Rule Only
-- Return only the Sigma rule without additional text or YAML formatting (
-yaml is not needed).
+- Return only the Sigma rule without additional text or YAML formatting (yaml is not needed).
 - Focus on accuracy, resilience, and efficiency in dete

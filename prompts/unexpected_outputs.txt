@@ -153,7 +153,7 @@ detection:
     CommandLine|contains: "/user"
   condition: selection
 
-### Unexpected Output 12 (Specifications for words that do not conform to the rules("i"contains is wrong and there is no "equals" field) ###
+### Unexpected Output 12 (Specifications for words that do not conform to the rules("i"contains is wrong and there is no "equals" field)) ###
 detection:
   selection_original:
     OriginalFileName|iequals: "a.exe"
@@ -192,3 +192,14 @@ detection:
       - "C:\\Windows"
       - "C:\\Program Files"
   condition: selection and not filter
+
+### Unexpected Output 14 (There is no service called sysmon) ###
+logsource:
+  product: windows
+  service: sysmon
+  category: process_creation
+
+### Unexpected Output 14 (Fixed) ###
+logsource:
+  product: windows
+  category: process_creation
