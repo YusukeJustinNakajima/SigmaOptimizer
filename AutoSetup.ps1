@@ -6,10 +6,9 @@ $env:OPENAI_APIKEY = "your_api_key_here"
 $requiredModules = @("Pester", "powershell-yaml", "Invoke-ArgFuscator")
 
 # GitHub repository information
-$repo = "Yamato-Security/hayabusa"
-$apiUrl = "https://api.github.com/repos/$repo/releases/latest"
-$zipFile = "hayabusa-latest.zip"
-$extractPath = "hayabusa-latest"
+$downloadUrl = "https://github.com/Yamato-Security/hayabusa/releases/download/v3.1.0/hayabusa-3.1.0-win-x64.zip"
+$zipFile = "hayabusa-3.1.0-win-x64.zip"
+$extractPath = "hayabusa-3.1.0"
 
 # Tar file to extract
 $tarFile = "benign_evtx_logs/win10-client.tgz"
@@ -19,18 +18,17 @@ $tarExtractPath = "benign_evtx_logs/"
 foreach ($module in $requiredModules) {
     if (-not (Get-Module -ListAvailable -Name $module)) {
         Write-Output "Installing module: $module"
-        Install-Module -Name $module -Force -SkipPublisherCheck
+        if ($module -eq "Pester") {
+            Install-Module -Name "Pester" -RequiredVersion "5.7.1" -Force -AllowClobber -SkipPublisherCheck
+        } else {
+            Install-Module -Name $module -Force -SkipPublisherCheck
+        }
     } else {
         Write-Output "Module already installed: $module"
     }
 }
 
 # ====== Download the Latest Hayabusa ZIP ======
-$response = Invoke-RestMethod -Uri $apiUrl -Headers @{"Accept"="application/vnd.github.v3+json"}
-
-# Retrieve the download URL for the latest ZIP file
-$downloadUrl = $response.assets | Where-Object { $_.name -match "win-x64.zip" } | Select-Object -ExpandProperty browser_download_url
-
 if ($downloadUrl) {
     Write-Output "Downloading from: $downloadUrl"
 
