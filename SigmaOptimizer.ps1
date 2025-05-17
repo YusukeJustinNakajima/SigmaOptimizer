@@ -474,7 +474,7 @@ foreach ($logName in $combinedXml.Keys) {
         if ($xmlDoc.Event.System) {
             foreach ($node in $xmlDoc.Event.System.ChildNodes) {
                 $key = $node.Name
-                if ($baseKeysList -contains $key) {
+                if ($detectionFields -contains $key) {
                     $value = $node.InnerText
                     $finalLog += "${key}: $value`n"
                 }
