@@ -45,7 +45,7 @@ function Invoke-OpenAIRequest {
                 @{ role = "user"; content = $combinedContent }
             )
         } | ConvertTo-Json -Depth 10
-    } else {
+    } elseif ($model -eq "o3-mini") {
         $combinedContent = "$roleContent`n`n"
         $combinedContent += "$userContent`n`n"
         $body = @{
@@ -53,6 +53,7 @@ function Invoke-OpenAIRequest {
             messages = @(
                 @{ role = "developer"; content = $combinedContent }
             )
+            reasoning_effort="high"
         } | ConvertTo-Json -Depth 10
     }
     
