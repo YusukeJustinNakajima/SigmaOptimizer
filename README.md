@@ -1,6 +1,6 @@
 
 # SigmaOptimizer <br> ~ Automated Sigma Rule Generation and Optimization ~  
-## ⚠️Note: This repository is not maintained, so please use [SigmaOptimizer-UI](https://github.com/YusukeJustinNakajima/SigmaOptimizer-UI)** instead.
+## ⚠️Note: This repository is not maintained, so please use [SigmaOptimizer-UI](https://github.com/YusukeJustinNakajima/SigmaOptimizer-UI) instead.
 
 ## 🎯 Overview  
 **SigmaOptimizer** is a **End-to-End Sigma rule generation and optimization tool** that automatically creates, tests, and improves Sigma rules based on real-world logs using **LLM**.  It is implemented as a PowerShell script and **integrates log analysis, rule evaluation, and iterative refinement** to enhance detection capabilities. You can also try **[SigmaOptimizer-UI](https://github.com/YusukeJustinNakajima/SigmaOptimizer-UI)**, which offers a user-friendly interface for easier use.
